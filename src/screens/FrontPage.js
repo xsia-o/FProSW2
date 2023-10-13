@@ -1,10 +1,11 @@
 import React from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import NavBar from './NavBar'; 
 
 function FrontPage({ onCards, onExpenses, onAccount, onLogoff }) {
+  
   return (
     <div>
+      <NavBar />
       <h2>Bienvenido a la página principal</h2>
       <ul>
         <li>

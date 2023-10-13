@@ -6,6 +6,7 @@ import FrontPage from './screens/FrontPage';
 import CardScreen from './screens/CardScreen';
 import ExpensesScreen from './screens/ExpensesScreen';
 import AccountPage from './screens/AccountPage';
+import RegisterCard from './screens/RegisterCard';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -49,6 +50,7 @@ function App() {
       {isLoggedIn && currentPage === 'cardscreen' && (
         <CardScreen
           onBack={() => handleNavigation('frontpage')}
+          onRegister={() => handleNavigation('registerCard')}
         />
       )}
       {isLoggedIn && currentPage === 'expensesscreen' && (
@@ -59,6 +61,11 @@ function App() {
       {isLoggedIn && currentPage === 'accountpage' && (
         <AccountPage
           onBack={() => handleNavigation('frontpage')}
+        />
+      )}
+      {isLoggedIn && currentPage === 'registerCard' && (
+        <RegisterCard
+          onBack={() => handleNavigation('cardscreen')}
         />
       )}
     </div>

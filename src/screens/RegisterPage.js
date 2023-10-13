@@ -1,5 +1,7 @@
 import React, { useState,  useEffect  } from 'react';
+import { User } from '../classes/user';
 import axios from 'axios';
+
 import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -14,6 +16,7 @@ function RegisterPage({ onNavigate }) {
     lname: '',
     email: '',
     phone: '',
+    username: '',
     password: '',
   });
 
@@ -30,10 +33,10 @@ function RegisterPage({ onNavigate }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = { ...formData };
-    console.log(userData);
+    const newUser = new User(formData.fname, formData.lname, '', 0, formData.email, formData.phone, formData.username, formData.password);
+
     try {
-      await axios.post('http://localhost:3000/guardar-usuarios', formData);
+      await axios.post('http://localhost:3000/guardar-usuarios', newUser);
       console.log('Datos enviados con éxito');
     } catch (error) {
       console.error('Error al enviar los datos:', error);
@@ -45,8 +48,8 @@ function RegisterPage({ onNavigate }) {
     setTermsAccepted(!termsAccepted);
   };
   const checkFormCompletion = () => {
-    const { fname, lname, email, phone, password } = formData;
-    return fname && lname && email && phone && password && termsAccepted;
+    const { fname, lname, email, phone, username, password } = formData;
+    return fname && lname && email && phone && username && password && termsAccepted;
   };
 
   useEffect(() => {
@@ -103,16 +106,16 @@ function RegisterPage({ onNavigate }) {
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
         <TextField
           required
-          id="outlined-password-input"
-          label="Contraseña"
-          name="password"
-          value={formData.password}
+          id="outlined-required"
+          label="Username"
+          name="username"
+          value={formData.username}
           onChange={handleChange}
         />
         <TextField
           required
           id="outlined-password-input"
-          label="Confirmar contraseña"
+          label="Contraseña"
           name="password"
           value={formData.password}
           onChange={handleChange}
