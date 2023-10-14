@@ -39,13 +39,13 @@ function RegisterCard({ onBack }) {
     const [formData, setFormData] = useState({
         cardNumber: '',
         accountNumber: '',
-        expireDate: '',
+        expireDate: null,
         coin: '',
         minimum: '',
-        billingDate: '',
+        billingDate: null,
         interestRate: '',
         creditLine: '',
-        lastDayPayment: '',
+        lastDayPayment: null,
     });
 
     const handleChange = (e) => {
@@ -54,6 +54,13 @@ function RegisterCard({ onBack }) {
           ...formData,
           [name]: value,
         });
+    };
+
+    const handleDateChange = (name, date) => {
+      setFormData({
+        ...formData,
+        [name]: date,
+      });
     };
 
     const handleTab = (event, newValue) => {
@@ -76,14 +83,15 @@ function RegisterCard({ onBack }) {
           />
         </Stack>
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-          <TextField
-            required
-            id="outlined-required"
-            label="Fecha de Vencimiento"
-            name="expireDate"
-            value={formData.expireDate}
-            onChange={handleChange}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Fecha de Vencimiento"
+              name="expireDate"
+              value={formData.expireDate}
+              onChange={(date) => handleDateChange("expireDate", date)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
           <TextField
             required
             id="outlined-required"
@@ -117,14 +125,15 @@ function RegisterCard({ onBack }) {
         <TabPanel value={value} index={1}>
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Fecha de Facturacion"
-                name="billingDate"
-                value={formData.billingDate}
-                onChange={handleChange}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Fecha de Facturacion"
+                  name="billingDate"
+                  value={formData.billingDate}
+                  onChange={(date) => handleDateChange("billingDate", date)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
               <TextField
                 required
                 id="outlined-required"
@@ -143,14 +152,15 @@ function RegisterCard({ onBack }) {
                 value={formData.creditLine}
                 onChange={handleChange}
               />
-              <TextField
-                required
-                id="outlined-required"
-                label="Ultimo Dia de Pago"
-                name="lastDayPayment"
-                value={formData.lastDayPayment}
-                onChange={handleChange}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Ultimo Dia de Pago"
+                  name="lastDayPayment"
+                  value={formData.lastDayPayment}
+                  onChange={(date) => handleDateChange("lastDayPayment", date)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Stack>
             <Button variant="contained" type="submit" disabled={!creditFormComplete}>
               Regístrar Credito
