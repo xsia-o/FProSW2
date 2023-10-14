@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Credit, Debit } from '../classes/card';
+import { Credit, Debit } from '../classes/card'
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -35,52 +35,36 @@ function TabPanel(props) {
 }
 
 function RegisterCard({ onBack }) {
-  const [value, setValue] = React.useState(0);
-  const [debitFormComplete, setDebitFormComplete] = useState(false);
-  const [creditFormComplete, setCreditFormComplete] = useState(false);
-
-  const [formData, setFormData] = useState({
-    cardNumber: '',
-    accountNumber: '',
-    expireDate: null,
-    coin: '',
-    minimum: '',
-    billingDate: null,
-    interestRate: '',
-    creditLine: '',
-    lastDayPayment: null,
-  });
-
-  const handleChange = (name, value) => {
-    setFormData({
-      ...formData,
-      [name]: value,
+    const [value, setValue] = React.useState(0);
+    const [formData, setFormData] = useState({
+        cardNumber: '',
+        accountNumber: '',
+        expireDate: '',
+        coin: '',
+        minimum: '',
+        billingDate: '',
+        interestRate: '',
+        creditLine: '',
+        lastDayPayment: '',
     });
-    const requiredFields = ['cardNumber', 'coin'];
 
-    if (requiredFields.every((field) => formData[field] !== '') && formData.expireDate !== null) {
-      setDebitFormComplete(true);
-    } else {
-      setDebitFormComplete(false);
-    }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+    };
 
-    if (requiredFields.every((field) => formData[field] !== '') && formData.billingDate !== null && formData.interestRate !== '' && formData.creditLine !== '' && formData.lastDayPayment !== null) {
-      setCreditFormComplete(true);
-    } else {
-      setCreditFormComplete(false);
-    }
-  };
-
-  const handleTab = (event, newValue) => {
-    setValue(newValue);
-  };
+    const handleTab = (event, newValue) => {
+      setValue(newValue);
+    };
 
   return (
     <div>
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Registrar Tarjeta</h2>
         <p>Completa los datos de tu tarjeta:</p>
-
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
           <TextField
             required
@@ -88,37 +72,31 @@ function RegisterCard({ onBack }) {
             label="Numero de Tarjeta"
             name="cardNumber"
             value={formData.cardNumber}
-            onChange={(e) => handleChange('cardNumber', e.target.value)}
+            onChange={handleChange}
           />
         </Stack>
-
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              required
-              label="Fecha de Vencimiento"
-              name="expireDate"
-              value={formData.expireDate}
-              onChange={(date) => handleChange('expireDate', date)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-
+          <TextField
+            required
+            id="outlined-required"
+            label="Fecha de Vencimiento"
+            name="expireDate"
+            value={formData.expireDate}
+            onChange={handleChange}
+          />
           <TextField
             required
             id="outlined-required"
             label="Moneda"
             name="coin"
             value={formData.coin}
-            onChange={(e) => handleChange('coin', e.target.value)}
+            onChange={handleChange}
           />
         </Stack>
-
         <Tabs value={value} onChange={handleTab} centered>
           <Tab label="Debito" />
           <Tab label="Credito" />
         </Tabs>
-
         <TabPanel value={value} index={0}>
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -128,39 +106,34 @@ function RegisterCard({ onBack }) {
                 label="Ingreso Minimo"
                 name="minimum"
                 value={formData.minimum}
-                onChange={(e) => handleChange('minimum', e.target.value)}
+                onChange={handleChange}
               />
-            </Stack>
-            <Button variant="contained" type="submit" disabled={!debitFormComplete}>
-              Regístrar Debito
-            </Button>
+              </Stack>
+              <Button variant="contained" type="submit">
+                Regístrar Debito
+              </Button>
           </Stack>
         </TabPanel>
-
         <TabPanel value={value} index={1}>
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  required
-                  label="Fecha de Facturacion"
-                  name="billingDate"
-                  value={formData.billingDate}
-                  onChange={(date) => handleChange('billingDate', date)}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-
+              <TextField
+                required
+                id="outlined-required"
+                label="Fecha de Facturacion"
+                name="billingDate"
+                value={formData.billingDate}
+                onChange={handleChange}
+              />
               <TextField
                 required
                 id="outlined-required"
                 label="Tasa de Interes"
                 name="interestRate"
                 value={formData.interestRate}
-                onChange={(e) => handleChange('interestRate', e.target.value)}
+                onChange={handleChange}
               />
             </Stack>
-
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
               <TextField
                 required
@@ -168,21 +141,17 @@ function RegisterCard({ onBack }) {
                 label="Linea de Credito"
                 name="creditLine"
                 value={formData.creditLine}
-                onChange={(e) => handleChange('creditLine', e.target.value)}
+                onChange={handleChange}
               />
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  required
-                  label="Ultimo Dia de Pago"
-                  name="lastDayPayment"
-                  value={formData.lastDayPayment}
-                  onChange={(date) => handleChange('lastDayPayment', date)}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
+              <TextField
+                required
+                id="outlined-required"
+                label="Ultimo Dia de Pago"
+                name="lastDayPayment"
+                value={formData.lastDayPayment}
+                onChange={handleChange}
+              />
             </Stack>
-
             <Button variant="contained" type="submit" disabled={!creditFormComplete}>
               Regístrar Credito
             </Button>
