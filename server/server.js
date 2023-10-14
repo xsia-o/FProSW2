@@ -10,9 +10,12 @@ app.use(cors());
 app.post('/guardar-usuarios', async (req, res) => {
   try {
     const { fname, lname, dni, age, email, phone, username, password} = req.body;
-    await db.none('INSERT INTO users (fname, lname, dni, age, email, phone, username, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [fname, lname, dni, age, email, phone, username, password]);
-
-    res.status(201).json({ message: 'Datos almacenados con éxito' });
+    if (await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email])) {
+      res.status(401).json({ message: 'Correo ya registrado' });
+    } else {
+      await db.none('INSERT INTO users (fname, lname, dni, age, email, phone, username, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [fname, lname, dni, age, email, phone, username, password]);
+      res.status(201).json({ message: 'Datos almacenados con éxito' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al guardar los datos en la base de datos' });
@@ -23,7 +26,7 @@ app.post('/iniciar-sesion', async (req, res) => {
   const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
 
   if (user) {
-    res.status(200).json({ message: 'Inicio de sesión exitoso' });
+    res.status(200).json({ message: 'Inicio de sesión exitoso', userId: user.id });
   } else {
     res.status(401).json({ error: 'Credenciales incorrectas' });
   }

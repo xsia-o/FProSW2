@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Credit, Debit } from '../classes/card'
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -35,10 +36,11 @@ function TabPanel(props) {
 }
 
 function RegisterCard({ onBack }) {
+  const userId = Cookies.get('userId');
   const [value, setValue] = React.useState(0);
   const [formData, setFormData] = useState({
     cardNumber: '',
-    accountNumber: '',
+    accountNumber: userId,
     expireDate: null,
     coin: '',
     minimum: '',

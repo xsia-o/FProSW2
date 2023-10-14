@@ -14,8 +14,7 @@ function App() {
 
   const handleNavigation = (page) => {
     setCurrentPage(page);
-  };
-
+  };  
   return (
     <div className="App">
       {currentPage === 'home' && (

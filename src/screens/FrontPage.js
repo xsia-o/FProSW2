@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar'; 
 
-function FrontPage({ onCards, onExpenses, onAccount, onLogoff }) {
+function FrontPage({ onCards, onExpenses, onAccount, onLogoff}) {
   
   return (
     <div>
