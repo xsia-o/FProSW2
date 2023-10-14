@@ -36,6 +36,7 @@ function TabPanel(props) {
 }
 
 function RegisterCard({ onBack }) {
+  //Logica para Registrar Tarjetas
   const userId = Cookies.get('userId');
   const [value, setValue] = React.useState(0);
   const [formData, setFormData] = useState({
@@ -49,7 +50,6 @@ function RegisterCard({ onBack }) {
     creditLine: '',
     lastDayPayment: null,
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -57,18 +57,7 @@ function RegisterCard({ onBack }) {
       [name]: value,
     });
   };
-
-  const handleDateChange = (name, date) => {
-    setFormData({
-      ...formData,
-      [name]: date,
-    });
-  };
-
-  const handleTab = (event, newValue) => {
-    setValue(newValue);
-  };
-
+  
   const handleSubmitDebit = async (e) => {
     e.preventDefault();
     const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.minimum);
@@ -80,7 +69,6 @@ function RegisterCard({ onBack }) {
     } 
     onBack(); 
   };
-
   const handleSubmitCredit = async (e) => {
     e.preventDefault();
     const newCredit = new Credit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment);
@@ -91,6 +79,64 @@ function RegisterCard({ onBack }) {
       console.error('Error al enviar los datos:', error);
     } 
     onBack(); 
+  };
+  //Logica para Fechas
+  const handleDateChange = (name, date) => {
+    setFormData({
+      ...formData,
+      [name]: date,
+    });
+  };
+  //Logica para Pestañas
+  const handleTab = (event, newValue) => {
+    setValue(newValue);
+  };
+  //Logica para correcto formato
+  const isValidCardNumber = (cardNumber) => {
+    const cardNumberRegex = /^\d{16}$/;
+    return cardNumber === '' || cardNumberRegex.test(cardNumber);
+  };
+  const isValidCoin = (coin) => {
+    return coin === '' || coin.length <= 10;
+  };
+  const isValidMinimum = (minimum) => {
+    return minimum === '' || (!isNaN(minimum) && minimum !== '' && minimum >= 0);
+  };
+  
+  const isValidCreditLine = (creditLine) => {
+    return creditLine === '' || (!isNaN(creditLine) && creditLine !== '' && creditLine >= 0);
+  };
+  
+  const isValidInterestRate = (interestRate) => {
+    const rate = parseFloat(interestRate);
+    return interestRate === '' || (!isNaN(rate) && rate >= 0 && rate <= 1);
+  };
+  
+  //Logica para PERMITIR Registrar
+  const isDebitButtonEnabled = () => {
+    return (
+      formData.cardNumber.trim() !== '' &&
+      formData.expireDate !== null &&
+      formData.coin.trim() !== '' &&
+      formData.minimum.trim() !== '' &&
+      isValidCardNumber(formData.cardNumber) &&
+      isValidCoin(formData.coin) &&
+      isValidMinimum(formData.minimum)
+    );
+  };
+  const isCreditButtonEnabled = () => {
+    return (
+      formData.cardNumber.trim() !== '' &&
+      formData.expireDate !== null &&
+      formData.coin.trim() !== '' &&
+      formData.billingDate !== null &&
+      formData.interestRate.trim() !== '' &&
+      formData.creditLine.trim() !== '' &&
+      formData.lastDayPayment !== null &&
+      isValidCardNumber(formData.cardNumber) &&
+      isValidCoin(formData.coin) &&
+      isValidCreditLine(formData.creditLine)
+    );
   };
 
   return (
@@ -106,6 +152,10 @@ function RegisterCard({ onBack }) {
             name="cardNumber"
             value={formData.cardNumber}
             onChange={handleChange}
+            error={!isValidCardNumber(formData.cardNumber)}
+            helperText={
+              !isValidCardNumber(formData.cardNumber) ? 'Número de tarjeta inválido' : ''
+            }
           />
         </Stack>
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -125,6 +175,8 @@ function RegisterCard({ onBack }) {
             name="coin"
             value={formData.coin}
             onChange={handleChange}
+            error={!isValidCoin(formData.coin)}
+            helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''}
           />
         </Stack>
         <Tabs value={value} onChange={handleTab} centered>
@@ -141,9 +193,16 @@ function RegisterCard({ onBack }) {
                 name="minimum"
                 value={formData.minimum}
                 onChange={handleChange}
+                error={!isValidMinimum(formData.minimum)}
+                helperText={!isValidMinimum(formData.minimum) ? 'Ingreso mínimo inválido' : ''}
               />
               </Stack>
-              <Button variant="contained" type="submit" onClick={handleSubmitDebit}>
+              <Button
+                variant="contained"
+                type="submit"
+                onClick={handleSubmitDebit}
+                disabled={!isDebitButtonEnabled()}
+              >
                 Regístrar Debito
               </Button>
           </Stack>
@@ -167,6 +226,8 @@ function RegisterCard({ onBack }) {
                 name="interestRate"
                 value={formData.interestRate}
                 onChange={handleChange}
+                error={!isValidInterestRate(formData.interestRate)}
+                helperText={!isValidInterestRate(formData.interestRate) ? 'Tasa de interés inválida' : ''}
               />
             </Stack>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -177,6 +238,8 @@ function RegisterCard({ onBack }) {
                 name="creditLine"
                 value={formData.creditLine}
                 onChange={handleChange}
+                error={!isValidCreditLine(formData.creditLine)}
+                helperText={!isValidCreditLine(formData.creditLine) ? 'Línea de crédito inválida' : ''}
               />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -188,7 +251,12 @@ function RegisterCard({ onBack }) {
                 />
               </LocalizationProvider>
             </Stack>
-            <Button variant="contained" type="submit" onClick={handleSubmitCredit}>
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={handleSubmitCredit}
+              disabled={!isCreditButtonEnabled()} 
+            >
               Regístrar Credito
             </Button>
           </Stack>
