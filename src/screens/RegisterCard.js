@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Credit, Debit } from '../classes/card'
+import axios from 'axios';
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -22,7 +23,6 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      {...other}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
@@ -32,7 +32,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
 
 function RegisterCard({ onBack }) {
   const [value, setValue] = React.useState(0);
@@ -76,19 +75,21 @@ function RegisterCard({ onBack }) {
     } catch (error) {
       console.error('Error al enviar los datos:', error);
     } 
-    onNavigate(); 
+    onBack(); 
   };
+
   const handleSubmitCredit = async (e) => {
     e.preventDefault();
-    const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment);
+    const newCredit = new Credit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment);
     try {
       await axios.post('http://localhost:3000/guardar-credito', newCredit);
       console.log('Datos enviados con éxito');
     } catch (error) {
       console.error('Error al enviar los datos:', error);
     } 
-    onNavigate(); 
+    onBack(); 
   };
+
   return (
     <div>
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -139,7 +140,7 @@ function RegisterCard({ onBack }) {
                 onChange={handleChange}
               />
               </Stack>
-              <Button variant="contained" type="submit">
+              <Button variant="contained" type="submit" onClick={handleSubmitDebit}>
                 Regístrar Debito
               </Button>
           </Stack>
@@ -184,7 +185,7 @@ function RegisterCard({ onBack }) {
                 />
               </LocalizationProvider>
             </Stack>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" onClick={handleSubmitCredit}>
               Regístrar Credito
             </Button>
           </Stack>

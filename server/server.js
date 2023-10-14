@@ -31,7 +31,7 @@ app.post('/iniciar-sesion', async (req, res) => {
 app.post('/guardar-debito', async (req, res) => {
   try {
     const { cardNumber, accountNumber, expireDate, coin, minimum} = req.body;
-    await db.none('INSERT INTO debito (cardNumber, accountNumber, expireDate, coin, minimum) VALUES ($1, $2, $3, $4, $5)', [cardNumber, accountNumber, expireDate, coin, minimum]);
+    await db.none('INSERT INTO debit (cardNumber, accountNumber, expireDate, coin, minimum) VALUES ($1, $2, $3, $4, $5)', [cardNumber, accountNumber, expireDate, coin, minimum]);
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
@@ -41,7 +41,7 @@ app.post('/guardar-debito', async (req, res) => {
 app.post('/guardar-credito', async (req, res) => {
   try {
     const { cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment} = req.body;
-    await db.none('INSERT INTO debito (cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment]);
+    await db.none('INSERT INTO credit (cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment]);
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
