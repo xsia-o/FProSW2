@@ -23,6 +23,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
+      {...other}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
