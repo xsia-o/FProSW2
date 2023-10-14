@@ -10,7 +10,6 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -34,39 +33,62 @@ function TabPanel(props) {
   );
 }
 
+
 function RegisterCard({ onBack }) {
-    const [value, setValue] = React.useState(0);
-    const [formData, setFormData] = useState({
-        cardNumber: '',
-        accountNumber: '',
-        expireDate: null,
-        coin: '',
-        minimum: '',
-        billingDate: null,
-        interestRate: '',
-        creditLine: '',
-        lastDayPayment: null,
+  const [value, setValue] = React.useState(0);
+  const [formData, setFormData] = useState({
+    cardNumber: '',
+    accountNumber: '',
+    expireDate: null,
+    coin: '',
+    minimum: '',
+    billingDate: null,
+    interestRate: '',
+    creditLine: '',
+    lastDayPayment: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-          ...formData,
-          [name]: value,
-        });
-    };
+  const handleDateChange = (name, date) => {
+    setFormData({
+      ...formData,
+      [name]: date,
+    });
+  };
 
-    const handleDateChange = (name, date) => {
-      setFormData({
-        ...formData,
-        [name]: date,
-      });
-    };
+  const handleTab = (event, newValue) => {
+    setValue(newValue);
+  };
 
-    const handleTab = (event, newValue) => {
-      setValue(newValue);
-    };
-
+  const handleSubmitDebit = async (e) => {
+    e.preventDefault();
+    const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.minimum);
+    try {
+      await axios.post('http://localhost:3000/guardar-debito', newDebit);
+      console.log('Datos enviados con éxito');
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+    } 
+    onNavigate(); 
+  };
+  const handleSubmitCredit = async (e) => {
+    e.preventDefault();
+    const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment);
+    try {
+      await axios.post('http://localhost:3000/guardar-credito', newCredit);
+      console.log('Datos enviados con éxito');
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+    } 
+    onNavigate(); 
+  };
   return (
     <div>
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -162,7 +184,7 @@ function RegisterCard({ onBack }) {
                 />
               </LocalizationProvider>
             </Stack>
-            <Button variant="contained" type="submit" disabled={!creditFormComplete}>
+            <Button variant="contained" type="submit">
               Regístrar Credito
             </Button>
           </Stack>
