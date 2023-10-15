@@ -95,6 +95,33 @@ app.post('/eliminar-credito', async (req, res) => {
   }
 });
 
+app.post('/obtener-debito-por-id', async (req, res) => {
+  try {
+    const { debitCardId } = req.body;
+    const debitCard = await db.oneOrNone('SELECT * FROM debit WHERE id = $1', [debitCardId]);
+
+    if (debitCard) {
+      res.status(200).json(debitCard);
+    } else {
+      res.status(404).json({ error: 'Tarjeta de débito no encontrada' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener la tarjeta de débito por ID' });
+  }
+});
+app.post('/actualizar-debito', async (req, res) => {
+  try {
+    const { debitCardId, cardNumber, accountNumber, expireDate, coin, minimum } = req.body;
+    await db.none('UPDATE debit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, minimum = $5 WHERE id = $6',
+      [cardNumber, accountNumber, expireDate, coin, minimum, debitCardId]);
+
+    res.status(200).json({ message: 'Tarjeta de débito actualizada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la tarjeta de débito' });
+  }
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);

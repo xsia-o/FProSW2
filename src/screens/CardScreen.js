@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import NavBar from './NavBar'; 
 
-function CardScreen({ onBack, onRegister }) {
+function CardScreen({ onBack, onRegister, onDebitModify }) {
   //Logica para obtener las Tarjetas
   const userId = Cookies.get('userId');
   const [debitCards, setDebitCards] = useState([]);
@@ -108,7 +108,15 @@ function CardScreen({ onBack, onRegister }) {
                       </Stack>
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'space-between' }}>
-                      <Button size="small">Modificar</Button>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        Cookies.set('debitCardId', debitCard.id);
+                        onDebitModify();
+                      }}
+                    >
+                      Modificar
+                    </Button>
                       <Button size="small" onClick={() => eliminarTarjetaDebito(debitCard.id)} >Eliminar</Button>
                     </CardActions>
                   </Card>
