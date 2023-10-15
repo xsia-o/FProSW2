@@ -99,7 +99,6 @@ app.post('/obtener-debito-por-id', async (req, res) => {
   try {
     const { debitCardId } = req.body;
     const debitCard = await db.oneOrNone('SELECT * FROM debit WHERE id = $1', [debitCardId]);
-
     if (debitCard) {
       res.status(200).json(debitCard);
     } else {
@@ -115,13 +114,39 @@ app.post('/actualizar-debito', async (req, res) => {
     const { debitCardId, cardNumber, accountNumber, expireDate, coin, minimum } = req.body;
     await db.none('UPDATE debit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, minimum = $5 WHERE id = $6',
       [cardNumber, accountNumber, expireDate, coin, minimum, debitCardId]);
-
     res.status(200).json({ message: 'Tarjeta de débito actualizada con éxito' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar la tarjeta de débito' });
   }
 });
+app.post('/obtener-credito-por-id', async (req, res) => {
+  try {
+    const { creditCardId } = req.body;
+    const creditCard = await db.oneOrNone('SELECT * FROM credit WHERE id = $1', [creditCardId]);
+    if (creditCard) {
+      console.log(creditCard);
+      res.status(200).json(creditCard);
+    } else {
+      res.status(404).json({ error: 'Tarjeta de crédito no encontrada' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener la tarjeta de crédito por ID' });
+  }
+});
+app.post('/actualizar-credito', async (req, res) => {
+  try {
+    const { creditCardId, cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment } = req.body;
+    await db.none('UPDATE credit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, billingDate = $5, creditLine = $6, interestRate = $7, lastDayPayment = $8 WHERE id = $9',
+      [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCardId]);
+    res.status(200).json({ message: 'Tarjeta de crédito actualizada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la tarjeta de crédito' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);

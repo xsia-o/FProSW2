@@ -8,6 +8,7 @@ import ExpensesScreen from './screens/ExpensesScreen';
 import AccountPage from './screens/AccountPage';
 import RegisterCard from './screens/RegisterCard';
 import DebitModify from './screens/DebitModify';
+import CreditModify from './screens/CreditModify';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -52,6 +53,7 @@ function App() {
           onBack={() => handleNavigation('frontpage')}
           onRegister={() => handleNavigation('registerCard')}
           onDebitModify={() => handleNavigation('debitmodify')}
+          onCreditModify={() => handleNavigation('creditmodify')}
         />
       )}
       {isLoggedIn && currentPage === 'expensesscreen' && (
@@ -71,6 +73,11 @@ function App() {
       )}
       {isLoggedIn && currentPage === 'debitmodify' && (
         <DebitModify
+          onBack={() => handleNavigation('cardscreen')}
+        />
+      )}
+      {isLoggedIn && currentPage === 'creditmodify' && (
+        <CreditModify
           onBack={() => handleNavigation('cardscreen')}
         />
       )}

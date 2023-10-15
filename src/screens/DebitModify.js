@@ -28,7 +28,6 @@ function DebitModify({onBack}){
     useEffect(() => {
         const debitCardId = Cookies.get('debitCardId');
         if (debitCardId) {
-          // Realiza una solicitud al servidor para obtener la información de la tarjeta de débito
           axios.post('http://localhost:3000/obtener-debito-por-id', { debitCardId })
             .then((response) => {
               const debitCardData = response.data;
@@ -87,7 +86,7 @@ function DebitModify({onBack}){
         <div>
             <NavBar />
             <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-                <h2>Modificar Tarjeta</h2>
+                <h2>Modificar Tarjeta Debito</h2>
                 <p>Completa los datos de tu tarjeta:</p>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
                 <TextField
@@ -145,7 +144,7 @@ function DebitModify({onBack}){
                         onBack();
                         }}
                     >
-                        Actualizar Debito
+                        Actualizar Débito
                     </Button>
                 </Stack>
             </Stack>
