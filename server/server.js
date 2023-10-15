@@ -51,6 +51,31 @@ app.post('/guardar-credito', async (req, res) => {
     res.status(500).json({ error: 'Error al guardar los datos en la base de datos' });
   }
 });
+app.post('/obtener-debito', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const debitCards = await db.manyOrNone('SELECT * FROM debit WHERE accountNumber = $1', [userId]);
+    res.status(200).json(debitCards);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener tarjetas de débito' });
+  }
+});
+
+// Ruta para obtener tarjetas de crédito del usuario
+app.post('/obtener-credito', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const creditCards = await db.manyOrNone('SELECT * FROM credit WHERE accountNumber = $1', [userId]);
+    res.status(200).json(creditCards);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener tarjetas de crédito' });
+  }
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);

@@ -164,6 +164,7 @@ function RegisterCard({ onBack }) {
               label="Fecha de Vencimiento"
               name="expireDate"
               value={formData.expireDate}
+              views={['month', 'year']}
               onChange={(date) => handleDateChange("expireDate", date)}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -184,6 +185,7 @@ function RegisterCard({ onBack }) {
           <Tab label="Credito" />
         </Tabs>
         <TabPanel value={value} index={0}>
+          
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
               <TextField
@@ -215,6 +217,7 @@ function RegisterCard({ onBack }) {
                   label="Fecha de Facturacion"
                   name="billingDate"
                   value={formData.billingDate}
+                  views={['day','month']}
                   onChange={(date) => handleDateChange("billingDate", date)}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -246,6 +249,7 @@ function RegisterCard({ onBack }) {
                   label="Ultimo Dia de Pago"
                   name="lastDayPayment"
                   value={formData.lastDayPayment}
+                  views={['day','month']}
                   onChange={(date) => handleDateChange("lastDayPayment", date)}
                   renderInput={(params) => <TextField {...params} />}
                 />
