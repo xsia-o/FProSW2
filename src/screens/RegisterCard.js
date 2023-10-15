@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Credit, Debit } from '../classes/card'
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import NavBar from './NavBar'; 
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -141,6 +142,8 @@ function RegisterCard({ onBack }) {
 
   return (
     <div>
+      <NavBar />
+      <br />
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Registrar Tarjeta</h2>
         <p>Completa los datos de tu tarjeta:</p>
@@ -263,10 +266,12 @@ function RegisterCard({ onBack }) {
             >
               Regístrar Credito
             </Button>
+            
           </Stack>
+          
         </TabPanel>
       </Stack>
-      <button onClick={onBack}>Atrás</button>
+      <Button variant="contained" onClick={onBack}>Atrás</Button>
     </div>
   );
 }
