@@ -14,22 +14,22 @@ function CardScreen({ onBack, onRegister }) {
   const userId = Cookies.get('userId');
   const [debitCards, setDebitCards] = useState([]);
   const [creditCards, setCreditCards] = useState([]);
+
   useEffect(() => {
-    axios.post('http://localhost:3000/obtener-debito', { userId })
-      .then((response) => {
-        setDebitCards(response.data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener tarjetas de débito', error);
-      });
-    axios.post('http://localhost:3000/obtener-credito', { userId })
-      .then((response) => {
-        setCreditCards(response.data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener tarjetas de crédito', error);
-      });
-  }, [userId]);
+    
+    cargarTarjetas();
+  });
+
+  const cargarTarjetas = async () => {
+    try {
+      const responseDebit = await axios.post('http://localhost:3000/obtener-debito', { userId }); // Cambia 1 por el ID de usuario real
+      const responseCredit = await axios.post('http://localhost:3000/obtener-credito', { userId }); // Cambia 1 por el ID de usuario real
+      setDebitCards(responseDebit.data);
+      setCreditCards(responseCredit.data);
+    } catch (error) {
+      console.error('Error al cargar tarjetas:', error);
+    }
+  };
 
   //Logica para dar formato a Tarjetas
   function formatYearMonth(DateValue) {
@@ -48,14 +48,24 @@ function CardScreen({ onBack, onRegister }) {
   
     return result;
   }
-  /*function formatMonthDay(DateValue) {
-    const date = new Date(DateValue);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const formattedDate = `${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-    return formattedDate;
-  } No se usa por el momento*/ 
+
+  // Logica para eliminar tarjetas
+  const eliminarTarjetaDebito = async (debitCardId) => {
+    try {
+      await axios.post('http://localhost:3000/eliminar-debito', { debitCardId });
+      cargarTarjetas();
+    } catch (error) {
+      console.error('Error al eliminar tarjeta de débito:', error);
+    }
+  };
+  const eliminarTarjetaCredito = async (creditCardId) => {
+    try {
+      await axios.post('http://localhost:3000/eliminar-credito', { creditCardId });
+      cargarTarjetas();
+    } catch (error) {
+      console.error('Error al eliminar tarjeta de crédito:', error);
+    }
+  };
 
   return (
     <div>
@@ -99,7 +109,7 @@ function CardScreen({ onBack, onRegister }) {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'space-between' }}>
                       <Button size="small">Modificar</Button>
-                      <Button size="small">Eliminar</Button>
+                      <Button size="small" onClick={() => eliminarTarjetaDebito(debitCard.id)} >Eliminar</Button>
                     </CardActions>
                   </Card>
                 </li>
@@ -137,7 +147,7 @@ function CardScreen({ onBack, onRegister }) {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'space-between' }}>
                       <Button size="small">Modificar</Button>
-                      <Button size="small">Eliminar</Button>
+                      <Button size="small" onClick={() => eliminarTarjetaCredito(creditCard.id)} >Eliminar</Button>
                     </CardActions>
                   </Card>
                 </li>

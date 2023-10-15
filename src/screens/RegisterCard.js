@@ -92,7 +92,7 @@ function RegisterCard({ onBack }) {
   const handleTab = (event, newValue) => {
     setValue(newValue);
   };
-  //Logica para correcto formato
+  //Logica para correcto formato (Faltan fechas)
   const isValidCardNumber = (cardNumber) => {
     const cardNumberRegex = /^\d{16}$/;
     return cardNumber === '' || cardNumberRegex.test(cardNumber);

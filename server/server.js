@@ -61,8 +61,6 @@ app.post('/obtener-debito', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener tarjetas de débito' });
   }
 });
-
-// Ruta para obtener tarjetas de crédito del usuario
 app.post('/obtener-credito', async (req, res) => {
   try {
     const { userId } = req.body;
@@ -75,6 +73,27 @@ app.post('/obtener-credito', async (req, res) => {
   }
 });
 
+app.post('/eliminar-debito', async (req, res) => {
+  try {
+    const { debitCardId } = req.body;
+    await db.none('DELETE FROM debit WHERE id = $1', [debitCardId]);
+    res.status(200).json({ message: 'Tarjeta de débito eliminada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de débito' });
+  }
+});
+
+app.post('/eliminar-credito', async (req, res) => {
+  try {
+    const { creditCardId } = req.body;
+    await db.none('DELETE FROM credit WHERE id = $1', [creditCardId]);
+    res.status(200).json({ message: 'Tarjeta de crédito eliminada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito' });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
