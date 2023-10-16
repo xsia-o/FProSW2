@@ -11,10 +11,16 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import logoImage from '../resources/LogoSmall.png';
+import '../App.css';
 
 const pages = ['Mis Tarjetas', 'Mis Gastos', 'Acerca'];
 const settings = ['Cuenta', 'Ajustes', 'Cerrar Sesion'];
+
+const logoStyles = {
+  width: '60px',
+  height: 'auto', 
+};
 
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -36,29 +42,13 @@ function NavBar() {
     };
   
     return (
-        <AppBar position="static">
-        <Container maxWidth="xl">
+        <AppBar className="whiteNavBar" position="static" sx={{ backgroundColor: 'white', boxShadow: '0px 0px 20px white' }}>
+        <Container maxWidth="xl" maxHeight="x0.5">
           <Toolbar disableGutters>
 
             {/* Logo de la version completa */}
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              FPRO
-            </Typography>
+            <img src={logoImage} alt="Logo" style={logoStyles} className="logo1"></img>
+
             {/* Menu de la version mobil */}  
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
@@ -98,25 +88,8 @@ function NavBar() {
             </Box>
 
             {/* Logo de la version mobil */}
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: 'flex', md: 'none' },
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              FPRO
-            </Typography>
+            <logoImage sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            
 
             {/* Opciones de la version completa */}  
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -124,7 +97,7 @@ function NavBar() {
                 <Button
                   key={page}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ my: 2, color: 'black', display: 'block' }}
                 >
                   {page}
                 </Button>

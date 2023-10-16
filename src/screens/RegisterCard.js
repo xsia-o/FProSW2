@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import '../App.css'; 
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -144,7 +145,7 @@ function RegisterCard({ onBack }) {
     <div>
       <NavBar />
       <br />
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Registrar Tarjeta</h2>
         <p>Completa los datos de tu tarjeta:</p>
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -270,8 +271,9 @@ function RegisterCard({ onBack }) {
           </Stack>
           
         </TabPanel>
+        <Button variant="outlined" onClick={onBack}>Atrás</Button>
       </Stack>
-      <Button variant="contained" onClick={onBack}>Atrás</Button>
+     
     </div>
   );
 }

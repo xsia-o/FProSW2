@@ -125,7 +125,6 @@ app.post('/obtener-credito-por-id', async (req, res) => {
     const { creditCardId } = req.body;
     const creditCard = await db.oneOrNone('SELECT * FROM credit WHERE id = $1', [creditCardId]);
     if (creditCard) {
-      console.log(creditCard);
       res.status(200).json(creditCard);
     } else {
       res.status(404).json({ error: 'Tarjeta de crédito no encontrada' });

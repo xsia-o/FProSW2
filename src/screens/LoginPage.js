@@ -8,6 +8,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import logoImage from '../resources/LogoNormal.png';
+import '../App.css';
+
 
 function LoginPage({ onRegister , onLogin}) {
   //Logica para Iniciar Sesion
@@ -58,7 +61,8 @@ function LoginPage({ onRegister , onLogin}) {
     event.preventDefault();
   };
   return (
-    <div>
+    <div className='LoginBox'>
+      <img src={logoImage} alt="Logo" className="logo"></img>
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Iniciar Sesión</h2>
         <TextField

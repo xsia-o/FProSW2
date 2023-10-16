@@ -11,6 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import '../App.css';
 
 function RegisterPage({ onNavigate }) {
   //Logica para Registrar Usuarios
@@ -97,7 +98,7 @@ function RegisterPage({ onNavigate }) {
     event.preventDefault();
   };
   return (
-    <div>
+    <div className='whiteBox'>
       <IconButton color="primary" aria-label="back to login" onClick={() => onNavigate()}>
         <ArrowBackIcon/>
       </IconButton>

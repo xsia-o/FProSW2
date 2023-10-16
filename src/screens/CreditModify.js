@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import '../App.css';
 
 function CreditModify({onBack}){
     //Logica para obtener Datos Almacenados
@@ -98,7 +99,7 @@ function CreditModify({onBack}){
     return (
         <div>
             <NavBar />
-            <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+            <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
                 <h2>Modificar Tarjeta Credito</h2>
                 <p>Completa los datos de tu tarjeta:</p>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -192,8 +193,9 @@ function CreditModify({onBack}){
                             Actualizar Crédito
                     </Button>
                 </Stack>
+                <Button variant="outlined" onClick={onBack}>Atrás</Button>
             </Stack>
-            <Button variant="contained" onClick={onBack}>Atrás</Button>
+            
         </div>
 
     );

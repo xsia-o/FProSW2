@@ -71,7 +71,7 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
     <div>
       <NavBar />
 
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={3}>
+      <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={3}>
         <br />
         <h2>Mis Tarjetas</h2>
 

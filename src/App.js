@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import RegisterPage from './screens/RegisterPage';
 import FrontPage from './screens/FrontPage';
@@ -11,7 +10,7 @@ import DebitModify from './screens/DebitModify';
 import CreditModify from './screens/CreditModify';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('login');
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   const handleNavigation = (page) => {
@@ -19,11 +18,7 @@ function App() {
   };  
   return (
     <div className="App">
-      {currentPage === 'home' && (
-        <HomePage
-          onNavigate={() => handleNavigation('login')}
-        />
-      )}
+      
       {currentPage === 'login' && (
         <LoginPage
           onRegister={() => handleNavigation('register')}
