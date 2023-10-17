@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,7 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import logoImage from '../resources/LogoSmall.png';
 import '../App.css';
 
-const pages = ['Mis Tarjetas', 'Mis Gastos', 'Acerca'];
 const settings = ['Cuenta', 'Ajustes', 'Cerrar Sesion'];
 
 const logoStyles = {
@@ -22,7 +20,7 @@ const logoStyles = {
   height: 'auto', 
 };
 
-function NavBar() {
+function NavBar({ onCards, onMain, onLogoff}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
   
@@ -47,61 +45,30 @@ function NavBar() {
           <Toolbar disableGutters>
 
             {/* Logo de la version completa */}
-            <img src={logoImage} alt="Logo" style={logoStyles} className="logo1"></img>
-
-            {/* Menu de la version mobil */}  
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none' },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
-            {/* Logo de la version mobil */}
-            <logoImage sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-            
+            <img src={logoImage} alt="Logo" style={logoStyles} className="logo1" onClick={onMain}></img>
 
             {/* Opciones de la version completa */}  
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'black', display: 'block' }}
-                >
-                  {page}
-                </Button>
-              ))}
+            <Box  sx={{ m: 2, flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <Button
+                onClick={onCards}
+                 sx={{ my: 2, color: 'black', display: 'block' }}
+              >
+                Mis Tarjetas
+              </Button>
+              <Button
+                disabled
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'black', display: 'block' }}
+              >
+                Mis Gastos
+              </Button>
+              <Button
+                disabled
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'black', display: 'block' }}
+              >
+                Acerca de
+              </Button>
             </Box>
 
             {/* Menu de Perfil para ambas versiones */}     
@@ -127,11 +94,13 @@ function NavBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem disabled>
+                  <Typography textAlign="center">Mi Cuenta</Typography>
+                </MenuItem>
+                <MenuItem onClick={onLogoff}>
+                  <Typography textAlign="center">Cerrar Sesion</Typography>
+                </MenuItem>
+                
               </Menu>
             </Box>
 

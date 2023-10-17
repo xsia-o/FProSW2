@@ -7,7 +7,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import NavBar from './NavBar'; 
 
 function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
   //Logica para obtener las Tarjetas
@@ -69,8 +68,6 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
 
   return (
     <div>
-      <NavBar />
-
       <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={3}>
         <br />
         <h2>Mis Tarjetas</h2>
@@ -174,7 +171,6 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
         )}
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
         <Button variant="outlined" onClick={() => onRegister()}>Agregar Tarjeta</Button>
-        <Button variant="contained" onClick={onBack}>Atrás</Button> {/*Borrar luego de implementar el NavBar*/}
         </Stack>
       </Stack>
     </div>

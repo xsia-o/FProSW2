@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import NavBar from './NavBar'; 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -98,7 +97,6 @@ function CreditModify({onBack}){
     
     return (
         <div>
-            <NavBar />
             <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
                 <h2>Modificar Tarjeta Credito</h2>
                 <p>Completa los datos de tu tarjeta:</p>
@@ -193,7 +191,6 @@ function CreditModify({onBack}){
                             Actualizar Crédito
                     </Button>
                 </Stack>
-                <Button variant="outlined" onClick={onBack}>Atrás</Button>
             </Stack>
             
         </div>

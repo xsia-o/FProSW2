@@ -1,18 +1,14 @@
-  import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Credit, Debit } from '../classes/card'
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import NavBar from './NavBar'; 
-
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -143,8 +139,6 @@ function RegisterCard({ onBack }) {
 
   return (
     <div>
-      <NavBar />
-      <br />
       <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Registrar Tarjeta</h2>
         <p>Completa los datos de tu tarjeta:</p>
