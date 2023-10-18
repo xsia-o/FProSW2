@@ -98,7 +98,7 @@ function RegisterPage({ onNavigate }) {
     event.preventDefault();
   };
   return (
-    <div className='whiteBox'>
+    <div className='whiteBoxRP'>
       <IconButton color="primary" aria-label="back to login" onClick={() => onNavigate()}>
         <ArrowBackIcon/>
       </IconButton>

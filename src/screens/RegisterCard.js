@@ -139,7 +139,7 @@ function RegisterCard({ onBack }) {
 
   return (
     <div>
-      <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack className="whiteBoxRC" direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Registrar Tarjeta</h2>
         <p>Completa los datos de tu tarjeta:</p>
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>

@@ -13,34 +13,34 @@ import MenuItem from '@mui/material/MenuItem';
 import logoImage from '../resources/LogoSmall.png';
 import '../App.css';
 
-const settings = ['Cuenta', 'Ajustes', 'Cerrar Sesion'];
-
 const logoStyles = {
-  width: '60px',
+  width: '50px',
   height: 'auto', 
 };
 
 function NavBar({ onCards, onMain, onLogoff}) {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    //Lineas comentadas para no mostrar advertencias en terminal (No se usan aún)
+
+    /*const [anchorElNav, setAnchorElNav] = React.useState(null);*/
     const [anchorElUser, setAnchorElUser] = React.useState(null);
   
-    const handleOpenNavMenu = (event) => {
+    /*const handleOpenNavMenu = (event) => {
       setAnchorElNav(event.currentTarget);
-    };
+    };*/
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
   
-    const handleCloseNavMenu = () => {
+    /*const handleCloseNavMenu = () => {
       setAnchorElNav(null);
-    };
+    };*/
   
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
   
     return (
-        <AppBar className="whiteNavBar" position="static" sx={{ backgroundColor: 'white', boxShadow: '0px 0px 20px white' }}>
+        <AppBar className="whiteNavBar" position="static" sx={{ backgroundColor: 'white', boxShadow: '0px 0px 20px white',width:"80%" }}>
         <Container maxWidth="xl" maxHeight="x0.5">
           <Toolbar disableGutters>
 
@@ -48,7 +48,7 @@ function NavBar({ onCards, onMain, onLogoff}) {
             <img src={logoImage} alt="Logo" style={logoStyles} className="logo1" onClick={onMain}></img>
 
             {/* Opciones de la version completa */}  
-            <Box  sx={{ m: 2, flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box alignItems={'center'} sx={{ m: 2, flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
                 onClick={onCards}
                  sx={{ my: 2, color: 'black', display: 'block' }}
@@ -57,14 +57,14 @@ function NavBar({ onCards, onMain, onLogoff}) {
               </Button>
               <Button
                 disabled
-                onClick={handleCloseNavMenu}
+                //onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'black', display: 'block' }}
               >
                 Mis Gastos
               </Button>
               <Button
                 disabled
-                onClick={handleCloseNavMenu}
+                //onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'black', display: 'block' }}
               >
                 Acerca de

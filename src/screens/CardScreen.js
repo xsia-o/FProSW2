@@ -68,7 +68,7 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
 
   return (
     <div>
-      <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={3}>
+      <Stack className="whiteBoxCS" direction="column" justifyContent="center" alignItems="center" spacing={3}>
         <br />
         <h2>Mis Tarjetas</h2>
 
@@ -76,8 +76,9 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
           <p>No se ha registrado ninguna tarjeta. Comienza agregando una!</p>
         ) : (
           <>
+          <div style={{maxHeight:"400px",overflowY: "auto"}}>
           <ul>
-            <Stack direction="row" alignItems="center" spacing={5}>
+            <Stack direction="column" alignItems="center" spacing={5}>
               {debitCards.map((debitCard) => (
                 <li key={debitCard.id}>
                   <Card variant="outlined" sx={{ minWidth: 350 }}>
@@ -121,6 +122,7 @@ function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
               ))}
               </Stack>
             </ul>
+            </div>
             
             <ul>
               <Stack direction="row" alignItems="center" spacing={5}>

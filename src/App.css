@@ -52,7 +52,7 @@ body {
   margin-left: 50%;
   transform: translate(-50%, -50%);
   padding: 30px;
-  padding-top: 10px;
+  padding-top: 5px;
   width: max-content;
   color: black;
   background-color: rgba(255, 255, 255, 1);
@@ -66,14 +66,15 @@ body {
   left: 100px;
 }
 
-.whiteBox {
-  margin-top: 350px;
+.whiteBoxFP {
+  margin-top: 150px;
   position: fixed;
+  align-content: center;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 25px;
+  padding: 15px;
   padding-left: 15px;
-  padding-top: 10px;
+  padding-top: 0px;
   width: fit-content;
   color: black;
   background-color: rgba(255, 255, 255, 1);
@@ -92,5 +93,116 @@ body {
 .logo {
   width: 350px;
   margin-bottom: -60px;
-  margin-top: -80px;
+  margin-top: -40px;
+}
+.logo1 {
+  width: 350px;
+  margin-bottom: -60px;
+  margin-top: -40px;
+}
+.whiteNavBar{
+
+    margin-top: 60px;
+    position: absolute;
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    padding-top: 10px;
+    height: 90px;
+    color: black;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 20px;
+    border-spacing: 10px;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+    
+
+}
+.Bienvenido {
+  text-align: center; /* Center the text horizontally */
+  color: black; /* Set the text color to black */
+  animation: shining 1.5s infinite alternate; /* Apply the animation */
+}
+
+@keyframes shining {
+  0% {
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
+  }
+  100% {
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px white, 0 0 50px white, 0 0 60px white;
+  }
+}
+.whiteBoxCS {
+  margin-top: 255px;
+  position: fixed;
+  align-content: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  width: fit-content;
+  color: black;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+}
+.whiteBoxDM {
+  margin-top: 200px;
+  position: fixed;
+  align-content: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  padding-left: 15px;
+  padding-top: 30px;
+  width: fit-content;
+  color: black;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+}
+.whiteBoxCM {
+  margin-top: 150px;
+  position: fixed;
+  align-content: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  width: fit-content;
+  color: black;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+}
+.whiteBoxRC {
+  margin-top: 250px;
+  position: fixed;
+  align-content: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  width: fit-content;
+  color: black;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+}
+.whiteBoxRP {
+  margin-top: 350px;
+  position: fixed;
+  align-content: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  padding-left: 15px;
+  padding-top: 0px;
+  width: fit-content;
+  color: black;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
 }

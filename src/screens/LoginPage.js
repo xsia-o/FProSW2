@@ -97,12 +97,18 @@ function LoginPage({ onRegister , onLogin}) {
 
         
         {error && <div style={{ color: 'red' }}>{error}</div>}    
-        <Button variant="outlined" onClick={handleLogin}>Iniciar Sesion</Button> 
+        <Button 
+        variant="outlined" 
+        onClick={handleLogin}
+        style={{ color: 'black', borderColor: 'black' }}
+        >Iniciar Sesion</Button> 
       </Stack>
       <br/>
       <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
           <label>Si no cuentas con un usuario:</label>
-          <Button variant="contained" onClick={() => onRegister()}>Registrate</Button>
+          <Button  variant="contained"
+    onClick={() => onRegister()}
+    style={{ backgroundColor: 'black', color: 'white' }}>Registrate</Button>
       </Stack>
     </div>
   );
