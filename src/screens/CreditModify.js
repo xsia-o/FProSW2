@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import {
+    Cookies,
+    axios,
     Stack,
     TextField,
     Button,
@@ -90,13 +90,10 @@ function CreditModify({ onBack }) {
     const isValidCreditLine = (creditLine) => {
         return creditLine === '' || (!isNaN(creditLine) && creditLine !== '' && creditLine >= 0);
     };
-
     const isValidInterestRate = (interestRate) => {
         const rate = parseFloat(interestRate);
         return interestRate === '' || (!isNaN(rate) && rate >= 0 && rate <= 1);
     };
-
-
     return (
         <div>
             <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -183,21 +180,10 @@ function CreditModify({ onBack }) {
                     </LocalizationProvider>
                 </Stack>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            updateCreditCard();
-                            onBack();
-                        }}
-                    >
-                        Actualizar Crédito
-                    </Button>
+                    <Button variant="contained" onClick={() => { updateCreditCard(); onBack(); }} > Actualizar Crédito </Button>
                 </Stack>
             </Stack>
-
         </div>
-
     );
 }
-
 export default CreditModify;

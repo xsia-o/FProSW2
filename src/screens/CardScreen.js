@@ -9,7 +9,6 @@ import {
   Button,
   Typography
 } from './abbr-lib'
-
 function CardScreen({ onBack, onRegister, onDebitModify, onCreditModify }) {
   //Logica para obtener las Tarjetas
   const userId = Cookies.get('userId');
