@@ -12,8 +12,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import '../App.css'; 
-
+import '../App.css';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -32,7 +31,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
 function RegisterCard({ onBack }) {
   //Logica para Registrar Tarjetas
   const userId = Cookies.get('userId');
@@ -55,7 +53,6 @@ function RegisterCard({ onBack }) {
       [name]: value,
     });
   };
-  
   const handleSubmitDebit = async (e) => {
     e.preventDefault();
     const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.minimum);
@@ -64,8 +61,8 @@ function RegisterCard({ onBack }) {
       console.log('Datos enviados con éxito');
     } catch (error) {
       console.error('Error al enviar los datos:', error);
-    } 
-    onBack(); 
+    }
+    onBack();
   };
   const handleSubmitCredit = async (e) => {
     e.preventDefault();
@@ -75,8 +72,8 @@ function RegisterCard({ onBack }) {
       console.log('Datos enviados con éxito');
     } catch (error) {
       console.error('Error al enviar los datos:', error);
-    } 
-    onBack(); 
+    }
+    onBack();
   };
   //Logica para Fechas
   const handleDateChange = (name, date) => {
@@ -100,16 +97,13 @@ function RegisterCard({ onBack }) {
   const isValidMinimum = (minimum) => {
     return minimum === '' || (!isNaN(minimum) && minimum !== '' && minimum >= 0);
   };
-  
   const isValidCreditLine = (creditLine) => {
     return creditLine === '' || (!isNaN(creditLine) && creditLine !== '' && creditLine >= 0);
   };
-  
   const isValidInterestRate = (interestRate) => {
     const rate = parseFloat(interestRate);
     return interestRate === '' || (!isNaN(rate) && rate >= 0 && rate <= 1);
   };
-  
   //Logica para PERMITIR Registrar
   const isDebitButtonEnabled = () => {
     return (
@@ -136,7 +130,6 @@ function RegisterCard({ onBack }) {
       isValidCreditLine(formData.creditLine)
     );
   };
-
   return (
     <div>
       <Stack className="whiteBoxRC" direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -183,7 +176,6 @@ function RegisterCard({ onBack }) {
           <Tab label="Credito" />
         </Tabs>
         <TabPanel value={value} index={0}>
-          
           <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
               <TextField
@@ -196,15 +188,15 @@ function RegisterCard({ onBack }) {
                 error={!isValidMinimum(formData.minimum)}
                 helperText={!isValidMinimum(formData.minimum) ? 'Ingreso mínimo inválido' : ''}
               />
-              </Stack>
-              <Button
-                variant="contained"
-                type="submit"
-                onClick={handleSubmitDebit}
-                disabled={!isDebitButtonEnabled()}
-              >
-                Regístrar Debito
-              </Button>
+            </Stack>
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={handleSubmitDebit}
+              disabled={!isDebitButtonEnabled()}
+            >
+              Regístrar Debito
+            </Button>
           </Stack>
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -215,7 +207,7 @@ function RegisterCard({ onBack }) {
                   label="Fecha de Facturacion"
                   name="billingDate"
                   value={formData.billingDate}
-                  views={['day','month']}
+                  views={['day', 'month']}
                   onChange={(date) => handleDateChange("billingDate", date)}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -247,7 +239,7 @@ function RegisterCard({ onBack }) {
                   label="Ultimo Dia de Pago"
                   name="lastDayPayment"
                   value={formData.lastDayPayment}
-                  views={['day','month']}
+                  views={['day', 'month']}
                   onChange={(date) => handleDateChange("lastDayPayment", date)}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -257,19 +249,15 @@ function RegisterCard({ onBack }) {
               variant="contained"
               type="submit"
               onClick={handleSubmitCredit}
-              disabled={!isCreditButtonEnabled()} 
+              disabled={!isCreditButtonEnabled()}
             >
               Regístrar Credito
             </Button>
-            
           </Stack>
-          
         </TabPanel>
         <Button variant="outlined" onClick={onBack}>Atrás</Button>
       </Stack>
-     
     </div>
   );
 }
-
 export default RegisterCard;

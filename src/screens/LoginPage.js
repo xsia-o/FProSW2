@@ -10,9 +10,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import logoImage from '../resources/LogoNormal.png';
 import '../App.css';
-
-
-function LoginPage({ onRegister , onLogin}) {
+function LoginPage({ onRegister, onLogin }) {
   //Logica para Iniciar Sesion
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
@@ -29,7 +27,6 @@ function LoginPage({ onRegister , onLogin}) {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3000/iniciar-sesion', formData);
-
       if (response.status === 200) {
         console.log('Inicio de sesión exitoso');
         Cookies.set('userId', response.data.userId.toString());
@@ -53,7 +50,6 @@ function LoginPage({ onRegister , onLogin}) {
     setFormData({ ...formData, email });
     setEmailError(email.trim() !== '' && !isValidEmail(email) ? 'Correo electrónico inválido' : '');
   };
-  
   //Logica para Mostrar/Ocultar contraseña
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -66,13 +62,13 @@ function LoginPage({ onRegister , onLogin}) {
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <h2>Iniciar Sesión</h2>
         <TextField
-            label="Correo Electronico"
-            name="email"
-            value={formData.email}
-            onChange={handleEmailChange}
-            error={emailError !== ''}
-            helperText={emailError}
-            />
+          label="Correo Electronico"
+          name="email"
+          value={formData.email}
+          onChange={handleEmailChange}
+          error={emailError !== ''}
+          helperText={emailError}
+        />
         <TextField
           label="Contraseña"
           type={showPassword ? 'text' : 'password'}
@@ -94,24 +90,21 @@ function LoginPage({ onRegister , onLogin}) {
             ),
           }}
         />
-
-        
-        {error && <div style={{ color: 'red' }}>{error}</div>}    
-        <Button 
-        variant="outlined" 
-        onClick={handleLogin}
-        style={{ color: 'black', borderColor: 'black' }}
-        >Iniciar Sesion</Button> 
+        {error && <div style={{ color: 'red' }}>{error}</div>}
+        <Button
+          variant="outlined"
+          onClick={handleLogin}
+          style={{ color: 'black', borderColor: 'black' }}
+        >Iniciar Sesion</Button>
       </Stack>
-      <br/>
+      <br />
       <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-          <label>Si no cuentas con un usuario:</label>
-          <Button  variant="contained"
-    onClick={() => onRegister()}
-    style={{ backgroundColor: 'black', color: 'white' }}>Registrate</Button>
+        <label>Si no cuentas con un usuario:</label>
+        <Button variant="contained"
+          onClick={() => onRegister()}
+          style={{ backgroundColor: 'black', color: 'white' }}>Registrate</Button>
       </Stack>
     </div>
   );
 }
-
 export default LoginPage;
