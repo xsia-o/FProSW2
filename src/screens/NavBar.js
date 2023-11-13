@@ -16,7 +16,7 @@ const logoStyles = {
   width: '50px',
   height: 'auto',
 };
-function NavBar({ onCards, onMain, onLogoff }) {
+function NavBar({ onCards, onMain, onAccount, onLogoff }) {
   //Lineas comentadas para no mostrar advertencias en terminal (No se usan aún)
   /*const [anchorElNav, setAnchorElNav] = React.useState(null);*/
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -84,7 +84,7 @@ function NavBar({ onCards, onMain, onLogoff }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem disabled>
+              <MenuItem onClick={onAccount}>
                 <Typography textAlign="center">Mi Cuenta</Typography>
               </MenuItem>
               <MenuItem onClick={onLogoff}>

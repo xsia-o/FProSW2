@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const pgp = require('pg-promise')();
-const db = pgp('postgres://postgres:285600@localhost:5432/postgres'); 
+const db = pgp('postgres://postgres:285600@localhost:5432/postgres');
 const cors = require('cors');
 
 app.use(express.json());
@@ -9,7 +9,7 @@ app.use(cors());
 
 app.post('/guardar-usuarios', async (req, res) => {
   try {
-    const { fname, lname, dni, age, email, phone, username, password} = req.body;
+    const { fname, lname, dni, age, email, phone, username, password } = req.body;
     if (await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email])) {
       res.status(401).json({ message: 'Correo ya registrado' });
     } else {
@@ -33,8 +33,8 @@ app.post('/iniciar-sesion', async (req, res) => {
 });
 app.post('/guardar-debito', async (req, res) => {
   try {
-    const { cardNumber, accountNumber, expireDate, coin, minimum} = req.body;
-    await db.none('INSERT INTO debit (cardNumber, accountNumber, expireDate, coin, minimum) VALUES ($1, $2, $3, $4, $5)', [cardNumber, accountNumber, expireDate, coin, minimum]);
+    const { cardNumber, accountNumber, expireDate, coin, cash } = req.body;
+    await db.none('INSERT INTO debit (cardNumber, accountNumber, expireDate, coin, cash) VALUES ($1, $2, $3, $4, $5)', [cardNumber, accountNumber, expireDate, coin, cash]);
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
@@ -43,7 +43,7 @@ app.post('/guardar-debito', async (req, res) => {
 });
 app.post('/guardar-credito', async (req, res) => {
   try {
-    const { cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment} = req.body;
+    const { cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment } = req.body;
     await db.none('INSERT INTO credit (cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment]);
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
@@ -111,9 +111,9 @@ app.post('/obtener-debito-por-id', async (req, res) => {
 });
 app.post('/actualizar-debito', async (req, res) => {
   try {
-    const { debitCardId, cardNumber, accountNumber, expireDate, coin, minimum } = req.body;
-    await db.none('UPDATE debit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, minimum = $5 WHERE id = $6',
-      [cardNumber, accountNumber, expireDate, coin, minimum, debitCardId]);
+    const { debitCardId, cardNumber, accountNumber, expireDate, coin } = req.body;
+    await db.none('UPDATE debit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4 WHERE id = $5',
+      [cardNumber, accountNumber, expireDate, coin, debitCardId]);
     res.status(200).json({ message: 'Tarjeta de débito actualizada con éxito' });
   } catch (error) {
     console.error(error);
@@ -143,6 +143,70 @@ app.post('/actualizar-credito', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar la tarjeta de crédito' });
+  }
+});
+app.post('/obtener-cuenta', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await db.oneOrNone('SELECT * FROM users WHERE id = $1', [userId]);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ error: 'Cuenta no encontrada' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener la cuenta por ID' });
+  }
+});
+app.post('/actualizar-cuenta', async (req, res) => {
+  try {
+    const { userId, fname, lname, email, phone, username, password, dni, age } = req.body;
+    const valid = await db.oneOrNone('SELECT * FROM users WHERE id = $1 AND password = $2', [userId, password]);
+    if (valid) {
+      await db.none('UPDATE users SET fname = $1, lname = $2, email = $3, phone = $4, username = $5, password = $6, dni = $7, age = $8 WHERE id = $9',
+        [fname, lname, email, phone, username, password, dni, age, userId]);
+      res.status(200).json({ message: 'Cuenta actualizada con éxito' });
+    } else {
+      res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la cuenta' });
+  }
+});
+app.post('/actualizar-contrasena', async (req, res) => {
+  try {
+    const { userId, password, newPass, newPassVali } = req.body;
+    const valid = await db.oneOrNone('SELECT * FROM users WHERE id = $1 AND password = $2', [userId, password]);
+    if (valid) {
+      if (newPass === newPassVali) {
+        await db.none('UPDATE users SET password = $1 WHERE id = $2',
+          [newPass, userId]);
+        res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+      } else {
+        res.status(401).json({ error: 'Validacion incorrecta' });
+      }
+    } else {
+      res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar la cuenta' });
+  }
+});
+app.post('/eliminar-cuenta', async (req, res) => {
+  try {
+    const { userId, password } = req.body;
+    const valid = await db.oneOrNone('SELECT * FROM users WHERE id = $1 AND password = $2', [userId, password]);
+    if (valid) {
+      await db.none('DELETE FROM users WHERE id = $1', [userId]);
+      res.status(200).json({ message: 'Tarjeta de crédito eliminada con éxito' });
+    } else {
+      res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito' });
   }
 });
 

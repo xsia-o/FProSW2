@@ -15,7 +15,6 @@ function DebitModify({ onBack }) {
         accountNumber: '',
         expireDate: null,
         coin: '',
-        minimum: '',
     });
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,7 +33,6 @@ function DebitModify({ onBack }) {
                         cardNumber: debitCardData.cardnumber,
                         accountNumber: debitCardData.accountnumber,
                         coin: debitCardData.coin,
-                        minimum: debitCardData.minimum,
                     });
                 })
                 .catch((error) => {
@@ -52,7 +50,7 @@ function DebitModify({ onBack }) {
                 accountNumber: formData.accountNumber,
                 expireDate: formData.expireDate,
                 coin: formData.coin,
-                minimum: formData.minimum,
+                
             })
                 .then((response) => {
                     console.log('Tarjeta de débito actualizada con éxito');
@@ -77,9 +75,7 @@ function DebitModify({ onBack }) {
     const isValidCoin = (coin) => {
         return coin === '' || coin.length <= 10;
     };
-    const isValidMinimum = (minimum) => {
-        return minimum === '' || (!isNaN(minimum) && minimum !== '' && minimum >= 0);
-    };
+    
     return (
         <div>
             <Stack className="whiteBoxDM" direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -122,18 +118,6 @@ function DebitModify({ onBack }) {
                     />
                 </Stack>
                 <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-                    <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Ingreso Minimo"
-                            name="minimum"
-                            value={formData.minimum}
-                            onChange={handleChange}
-                            error={!isValidMinimum(formData.minimum)}
-                            helperText={!isValidMinimum(formData.minimum) ? 'Ingreso mínimo inválido' : ''}
-                        />
-                    </Stack>
                     <Button
                         variant="contained"
                         onClick={() => {

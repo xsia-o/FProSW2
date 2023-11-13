@@ -8,157 +8,80 @@ import AccountPage from './screens/AccountPage';
 import RegisterCard from './screens/RegisterCard';
 import DebitModify from './screens/DebitModify';
 import CreditModify from './screens/CreditModify';
+import RegisterIncome from './screens/RegisterIncome';
 import NavBar from './screens/NavBar';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('login');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleNavigation = (page) => {
     setCurrentPage(page);
-  };  
+  };
+
+  const NavBarProps = {
+    onMain: () => handleNavigation('frontpage'),
+    onCards: () => handleNavigation('cardscreen'),
+    onExpenses: () => handleNavigation('expensesscreen'),
+    onAccount: () => handleNavigation('accountpage'),
+    onLogoff: () => {
+      setIsLoggedIn(false);
+      handleNavigation('login');
+    },
+  };
+
   return (
     <div className="App">
-      
       {currentPage === 'login' && (
         <LoginPage
           onRegister={() => handleNavigation('register')}
           onLogin={() => {
             setIsLoggedIn(true);
             handleNavigation('frontpage');
-          }} 
+          }}
         />
       )}
       {currentPage === 'register' && (
         <RegisterPage onNavigate={() => handleNavigation('login')} />
       )}
-      {isLoggedIn && currentPage === 'frontpage' && (
+      {isLoggedIn && (
         <div>
-          <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-           onCards={() => handleNavigation('cardscreen')}
-           onExpenses= {() => handleNavigation('expensesscreen')}
-           onAccount={() => handleNavigation('accountpage')}
-           onLogoff={() => { 
-            setIsLoggedIn(false);
-            handleNavigation('login');
-          }} 
-          />
-          <FrontPage
-          />
+          <NavBar {...NavBarProps} />
+          {currentPage === 'frontpage' && <FrontPage />}
+          {currentPage === 'cardscreen' && (
+            <CardScreen
+              onBack={() => handleNavigation('frontpage')}
+              onRegister={() => handleNavigation('registerCard')}
+              onIncome={() => handleNavigation('registerincome')}
+              onDebitModify={() => handleNavigation('debitmodify')}
+              onCreditModify={() => handleNavigation('creditmodify')}
+            />
+          )}
+          {currentPage === 'expensesscreen' && (
+            <ExpensesScreen onBack={() => handleNavigation('frontpage')} />
+          )}
+          {currentPage === 'accountpage' && (
+            <AccountPage 
+            onBack={() => handleNavigation('frontpage')} 
+            onLogoff={() => {
+              setIsLoggedIn(false);
+              handleNavigation('login');}} />
+          )}
+          {currentPage === 'registerCard' && (
+            <RegisterCard onBack={() => handleNavigation('cardscreen')} />
+          )}
+          {currentPage === 'debitmodify' && (
+            <DebitModify onBack={() => handleNavigation('cardscreen')} />
+          )}
+          {currentPage === 'creditmodify' && (
+            <CreditModify onBack={() => handleNavigation('cardscreen')} />
+          )}
+          {currentPage === 'registerincome' && (
+            <RegisterIncome onBack={() => handleNavigation('cardscreen')} />
+          )
+
+          }
         </div>
-      )}
-      
-      {isLoggedIn && currentPage === 'cardscreen' && (
-      <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <CardScreen
-          onBack={() => handleNavigation('frontpage')}
-          onRegister={() => handleNavigation('registerCard')}
-          onDebitModify={() => handleNavigation('debitmodify')}
-          onCreditModify={() => handleNavigation('creditmodify')}
-        />
-      </div>
-        
-      )}
-      {isLoggedIn && currentPage === 'expensesscreen' && (
-        <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <ExpensesScreen
-          onBack={() => handleNavigation('frontpage')}
-        />
-      </div>
-        
-      )}
-      {isLoggedIn && currentPage === 'accountpage' && (
-        <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <AccountPage
-          onBack={() => handleNavigation('frontpage')}
-        />
-      </div>
-        
-      )}
-      {isLoggedIn && currentPage === 'registerCard' && (
-        <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <RegisterCard
-          onBack={() => handleNavigation('cardscreen')}
-        />
-      </div>
-        
-      )}
-      {isLoggedIn && currentPage === 'debitmodify' && (
-        <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <DebitModify
-          onBack={() => handleNavigation('cardscreen')}
-        />
-      </div>
-        
-      )}
-      {isLoggedIn && currentPage === 'creditmodify' && (
-        <div>
-        <NavBar
-           onMain={()=> handleNavigation('frontpage')}
-         onCards={() => handleNavigation('cardscreen')}
-         onExpenses= {() => handleNavigation('expensesscreen')}
-         onAccount={() => handleNavigation('accountpage')}
-         onLogoff={() => { 
-          setIsLoggedIn(false);
-          handleNavigation('login');
-        }} 
-        />
-        <CreditModify
-          onBack={() => handleNavigation('cardscreen')}
-        />
-      </div>
-        
       )}
     </div>
   );

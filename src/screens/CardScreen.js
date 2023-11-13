@@ -68,29 +68,31 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
           <p>No se ha registrado ninguna tarjeta. Comienza agregando una!</p>
         ) : (
           <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-              <ul>
-                <Stack direction="column" alignItems="center" spacing={5}>
-                  {debitCards.map((debitCard) => (
-                    <li key={debitCard.id}>
-                      <Card variant="outlined" sx={{ minWidth: 350 }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom> Tarjeta Débito </Typography>
-                          <Typography variant="h5" component="div"> {formatCardSeparation(debitCard.cardnumber)} </Typography>
-                          <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="body2"> Fecha Exp. <br /> {formatYearMonth(debitCard.expiredate)} </Typography>
-                            <Typography variant="body2"> Moneda. <br /> {debitCard.coin} </Typography>
-                          </Stack>
-                        </CardContent>
-                        <CardActions sx={{ justifyContent: 'space-between' }}>
-                          <Button size="small" onClick={() => { Cookies.set('debitCardId', debitCard.id); onDebitModify(); }} > Modificar </Button>
-                          <Button size="small" onClick={() => eliminarTarjetaDebito(debitCard.id)} >Eliminar</Button>
-                        </CardActions>
-                      </Card>
-                    </li>
-                  ))}
-                </Stack>
-              </ul>
+            <ul>
+              <Stack direction="column" alignItems="center" spacing={5}>
+                {debitCards.map((debitCard) => (
+                  <li key={debitCard.id}>
+                    <Card variant="outlined" sx={{ minWidth: 350 }}>
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom> Tarjeta Débito </Typography>
+                        <Typography variant="h5" component="div"> {formatCardSeparation(debitCard.cardnumber)} </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(debitCard.expiredate)} </Typography>
+                          <Typography variant="body2"> Moneda <br /> {debitCard.coin} </Typography>
+                          <Typography variant="body2"> Disponible <br /> {debitCard.cash} </Typography>
+                        </Stack>
+                      </CardContent>
+                      <CardActions sx={{ justifyContent: 'space-between' }}>
+                        <Button size="small" onClick={() => { Cookies.set('debitCardId', debitCard.id); onDebitModify(); }} > Modificar </Button>
+                        <Button size="small"> Recargar </Button>
+                        <Button size="small" onClick={() => eliminarTarjetaDebito(debitCard.id)} >Eliminar</Button>
+                      </CardActions>
+                    </Card>
+                  </li>
+                ))}
+              </Stack>
+            </ul>
             <ul>
               <Stack direction="row" alignItems="center" spacing={5}>
                 {creditCards.map((creditCard) => (
@@ -101,8 +103,10 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
                         <Typography variant="h5" component="div"> {formatCardSeparation(creditCard.cardnumber)} </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Typography variant="body2"> Fecha Exp. <br /> {formatYearMonth(creditCard.expiredate)} </Typography>
-                          <Typography variant="body2"> Moneda. <br /> {creditCard.coin} </Typography>
+                          <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(creditCard.expiredate)} </Typography>
+                          <Typography variant="body2"> Moneda <br /> {creditCard.coin} </Typography>
+                          <Typography variant="body2"> Linea Cr <br /> {creditCard.creditline} </Typography>
+                          <Typography variant="body2"> Disponible <br /> {creditCard.creditline} </Typography>
                         </Stack>
                       </CardContent>
                       <CardActions sx={{ justifyContent: 'space-between' }}>

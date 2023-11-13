@@ -40,7 +40,7 @@ function RegisterCard({ onBack }) {
     accountNumber: userId,
     expireDate: null,
     coin: '',
-    minimum: '',
+    cash: '',
     billingDate: null,
     interestRate: '',
     creditLine: '',
@@ -55,7 +55,7 @@ function RegisterCard({ onBack }) {
   };
   const handleSubmitDebit = async (e) => {
     e.preventDefault();
-    const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.minimum);
+    const newDebit = new Debit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.cash);
     try {
       await axios.post('http://localhost:3000/guardar-debito', newDebit);
       console.log('Datos enviados con éxito');
@@ -94,8 +94,8 @@ function RegisterCard({ onBack }) {
   const isValidCoin = (coin) => {
     return coin === '' || coin.length <= 10;
   };
-  const isValidMinimum = (minimum) => {
-    return minimum === '' || (!isNaN(minimum) && minimum !== '' && minimum >= 0);
+  const isValidCash = (cash) => {
+    return cash === '' || (!isNaN(cash) && cash !== '' && cash >= 0);
   };
   const isValidCreditLine = (creditLine) => {
     return creditLine === '' || (!isNaN(creditLine) && creditLine !== '' && creditLine >= 0);
@@ -110,10 +110,10 @@ function RegisterCard({ onBack }) {
       formData.cardNumber.trim() !== '' &&
       formData.expireDate !== null &&
       formData.coin.trim() !== '' &&
-      formData.minimum.trim() !== '' &&
+      formData.cash.trim() !== '' &&
       isValidCardNumber(formData.cardNumber) &&
       isValidCoin(formData.coin) &&
-      isValidMinimum(formData.minimum)
+      isValidCash(formData.cash)
     );
   };
   const isCreditButtonEnabled = () => {
@@ -181,12 +181,12 @@ function RegisterCard({ onBack }) {
               <TextField
                 required
                 id="outlined-required"
-                label="Ingreso Minimo"
-                name="minimum"
-                value={formData.minimum}
+                label="Ingreso Monto Inicial"
+                name="cash"
+                value={formData.cash}
                 onChange={handleChange}
-                error={!isValidMinimum(formData.minimum)}
-                helperText={!isValidMinimum(formData.minimum) ? 'Ingreso mínimo inválido' : ''}
+                error={!isValidCash(formData.cash)}
+                helperText={!isValidCash(formData.cash) ? 'Ingreso monto inválido' : ''}
               />
             </Stack>
             <Button

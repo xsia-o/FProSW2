@@ -8,9 +8,9 @@ class Card {
     
   }
 class Debit extends Card {
-    constructor(cardNumber, accountNumber, expireDate, coin, minimum) {
+    constructor(cardNumber, accountNumber, expireDate, coin, cash) {
       super(cardNumber, accountNumber, expireDate, coin);
-      this.minimum = minimum;
+      this.cash = cash;
     }
   }
 class Credit extends Card {
