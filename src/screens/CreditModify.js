@@ -19,6 +19,7 @@ function CreditModify({ onBack }) {
         interestRate: '',
         creditLine: '',
         lastDayPayment: null,
+        insurance: '',
     });
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -39,6 +40,7 @@ function CreditModify({ onBack }) {
                         coin: creditCardData.coin,
                         interestRate: creditCardData.interestrate,
                         creditLine: creditCardData.creditline,
+                        insurance: creditCardData.insurance,
                     });
                 })
                 .catch((error) => {
@@ -48,18 +50,19 @@ function CreditModify({ onBack }) {
     }, []);
     //Logica para actualizar Tarjeta Credito
     const updateCreditCard = () => {
-        const creditCardId = Cookies.get('debitCardId');
+        const creditCardId = Cookies.get('creditCardId');
         if (creditCardId) {
             axios.post('http://localhost:3000/actualizar-credito', {
                 creditCardId,
-                cardNumber: formData.cardnumber,
-                accountNumber: formData.accountnumber,
+                cardNumber: formData.cardNumber,
+                accountNumber: formData.accountNumber,
                 expireDate: formData.expireDate,
                 coin: formData.coin,
                 billingDate: formData.billingDate,
                 interestRate: formData.interestRate,
                 creditLine: formData.creditLine,
                 lastDayPayment: formData.lastDayPayment,
+                insurance: formData.insurance,
             })
                 .then((response) => {
                     console.log('Tarjeta de crédito actualizada con éxito');
@@ -91,9 +94,12 @@ function CreditModify({ onBack }) {
         const rate = parseFloat(interestRate);
         return interestRate === '' || (!isNaN(rate) && rate >= 0 && rate <= 1);
     };
+    const isValidInsurance = (insurance) => {
+        return insurance === '' || (!isNaN(insurance) && insurance !== '' && insurance >= 0);
+    };
     return (
         <div>
-            <Stack className="whiteBox" direction="column" justifyContent="center" alignItems="center" spacing={2}>
+            <Stack className="whiteBoxRC" direction="column" justifyContent="center" alignItems="center" spacing={2}>
                 <h2>Modificar Tarjeta Credito</h2>
                 <p>Completa los datos de tu tarjeta:</p>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -175,6 +181,18 @@ function CreditModify({ onBack }) {
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
+                </Stack>
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                    <TextField
+                        required
+                        id="outlined-required"
+                        label="Seguro de Desgravamen"
+                        name="insurance"
+                        value={formData.insurance}
+                        onChange={handleChange}
+                        error={!isValidInsurance(formData.insurance)}
+                        helperText={!isValidInsurance(formData.insurance) ? 'Monto inválido' : ''}
+                    />
                 </Stack>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     <Button

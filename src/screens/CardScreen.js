@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
+function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
   //Logica para obtener las Tarjetas
   const userId = Cookies.get('userId');
   const [debitCards, setDebitCards] = useState([]);
@@ -35,11 +35,9 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
     return formattedDate;
   }
   function formatCardSeparation(StringValue) {
-    const part1 = StringValue.substring(0, 4);
-    const part2 = StringValue.substring(4, 8);
-    const part3 = StringValue.substring(8, 12);
-    const part4 = StringValue.substring(12, 16);
-    const result = part1 + "   " + part2 + "   " + part3 + "   " + part4;
+    const part1 = StringValue.substring(0, 3);
+    const lastpart = StringValue.substring(13, 16);
+    const result = part1 + "*   ****    ****   *" + lastpart;
     return result;
   }
   // Logica para eliminar tarjetas
@@ -67,7 +65,7 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
         {debitCards.length === 0 && creditCards.length === 0 ? (
           <p>No se ha registrado ninguna tarjeta. Comienza agregando una!</p>
         ) : (
-          <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+          <div style={{ maxHeight: "250px", overflowY: "auto" }}>
             <ul>
               <Stack direction="column" alignItems="center" spacing={5}>
                 {debitCards.map((debitCard) => (
@@ -85,7 +83,7 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
                       </CardContent>
                       <CardActions sx={{ justifyContent: 'space-between' }}>
                         <Button size="small" onClick={() => { Cookies.set('debitCardId', debitCard.id); onDebitModify(); }} > Modificar </Button>
-                        <Button size="small"> Recargar </Button>
+                        <Button size="small" onClick={() => { Cookies.set('debitCardId', debitCard.id); onIncome(); }}> + </Button>
                         <Button size="small" onClick={() => eliminarTarjetaDebito(debitCard.id)} >Eliminar</Button>
                       </CardActions>
                     </Card>
@@ -106,7 +104,7 @@ function CardScreen({ onRegister, onDebitModify, onCreditModify }) {
                           <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(creditCard.expiredate)} </Typography>
                           <Typography variant="body2"> Moneda <br /> {creditCard.coin} </Typography>
                           <Typography variant="body2"> Linea Cr <br /> {creditCard.creditline} </Typography>
-                          <Typography variant="body2"> Disponible <br /> {creditCard.creditline} </Typography>
+                          <Typography variant="body2"> Disponible <br /> {creditCard.creditcash} </Typography>
                         </Stack>
                       </CardContent>
                       <CardActions sx={{ justifyContent: 'space-between' }}>

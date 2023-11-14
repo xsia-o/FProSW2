@@ -14,12 +14,14 @@ class Debit extends Card {
     }
   }
 class Credit extends Card {
-    constructor(cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment) {
+    constructor(cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCash, insurance) {
       super(cardNumber, accountNumber, expireDate, coin);
       this.billingDate = billingDate;
       this.interestRate = interestRate;
       this.creditLine = creditLine;
       this.lastDayPayment = lastDayPayment;
+      this.creditCash = creditCash;
+      this.insurance = insurance;
     }
   }
 export { Card, Credit, Debit };

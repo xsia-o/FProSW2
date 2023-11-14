@@ -45,6 +45,7 @@ function RegisterCard({ onBack }) {
     interestRate: '',
     creditLine: '',
     lastDayPayment: null,
+    insurance: '',
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +67,7 @@ function RegisterCard({ onBack }) {
   };
   const handleSubmitCredit = async (e) => {
     e.preventDefault();
-    const newCredit = new Credit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment);
+    const newCredit = new Credit(formData.cardNumber, formData.accountNumber, formData.expireDate, formData.coin, formData.billingDate, formData.interestRate, formData.creditLine, formData.lastDayPayment, formData.creditLine, formData.insurance);
     try {
       await axios.post('http://localhost:3000/guardar-credito', newCredit);
       console.log('Datos enviados con éxito');
@@ -104,6 +105,9 @@ function RegisterCard({ onBack }) {
     const rate = parseFloat(interestRate);
     return interestRate === '' || (!isNaN(rate) && rate >= 0 && rate <= 1);
   };
+  const isValidInsurance = (insurance) => {
+    return insurance === '' || (!isNaN(insurance) && insurance !== '' && insurance >= 0);
+  };
   //Logica para PERMITIR Registrar
   const isDebitButtonEnabled = () => {
     return (
@@ -125,9 +129,11 @@ function RegisterCard({ onBack }) {
       formData.interestRate.trim() !== '' &&
       formData.creditLine.trim() !== '' &&
       formData.lastDayPayment !== null &&
+      formData.insurance.trim() !== '' &&
       isValidCardNumber(formData.cardNumber) &&
       isValidCoin(formData.coin) &&
-      isValidCreditLine(formData.creditLine)
+      isValidCreditLine(formData.creditLine) &&
+      isValidInsurance(formData.insurance)
     );
   };
   return (
@@ -244,6 +250,18 @@ function RegisterCard({ onBack }) {
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
+            </Stack>
+            <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Seguro de Desgravamen"
+                name="insurance"
+                value={formData.insurance}
+                onChange={handleChange}
+                error={!isValidInsurance(formData.insurance)}
+                helperText={!isValidInsurance(formData.insurance) ? 'Monto inválido' : ''}
+              />
             </Stack>
             <Button
               variant="contained"

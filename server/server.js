@@ -43,8 +43,10 @@ app.post('/guardar-debito', async (req, res) => {
 });
 app.post('/guardar-credito', async (req, res) => {
   try {
-    const { cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment } = req.body;
-    await db.none('INSERT INTO credit (cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment]);
+    const { cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCash, insurance } = req.body;
+        await db.none('INSERT INTO credit (cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCash, insurance) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)'
+    , [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCash, insurance]);
+
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
@@ -136,9 +138,9 @@ app.post('/obtener-credito-por-id', async (req, res) => {
 });
 app.post('/actualizar-credito', async (req, res) => {
   try {
-    const { creditCardId, cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment } = req.body;
-    await db.none('UPDATE credit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, billingDate = $5, creditLine = $6, interestRate = $7, lastDayPayment = $8 WHERE id = $9',
-      [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, creditCardId]);
+    const { creditCardId, cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, insurance } = req.body;
+    await db.none('UPDATE credit SET cardNumber = $1, accountNumber = $2, expireDate = $3, coin = $4, billingDate = $5, interestRate = $6, creditLine = $7, lastDayPayment = $8, insurance = $9 WHERE id = $10',
+      [cardNumber, accountNumber, expireDate, coin, billingDate, interestRate, creditLine, lastDayPayment, insurance, creditCardId]);
     res.status(200).json({ message: 'Tarjeta de crédito actualizada con éxito' });
   } catch (error) {
     console.error(error);
@@ -209,7 +211,19 @@ app.post('/eliminar-cuenta', async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito' });
   }
 });
-
+app.post('/actualizar-cash', async (req, res) => {
+  try {
+    const { debitCardId, income } = req.body;
+    const currentCashResult = await db.one('SELECT cash FROM debit WHERE id = $1', debitCardId);
+    const currentCash = parseFloat(currentCashResult.cash);
+    const newCash = currentCash + parseFloat(income);
+    await db.none('UPDATE debit SET cash = $1 WHERE id = $2', [newCash, debitCardId]);
+    res.status(200).json({ message: 'Cash actualizado con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar el cash de la tarjeta de débito' });
+  }
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);

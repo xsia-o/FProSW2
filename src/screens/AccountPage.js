@@ -82,7 +82,7 @@ function AccountPage({ onBack, onLogoff }) {
           if (error.response && error.response.data && error.response.data.error) {
             setError(error.response.data.error);
           } else {
-            setError("Error desconocido al actualizar la contraseña");
+            setError("Error desconocido al actualizar la cuenta");
           }
         });
     }
@@ -124,7 +124,7 @@ function AccountPage({ onBack, onLogoff }) {
           if (error.response && error.response.data && error.response.data.error) {
             setError3(error.response.data.error);
           } else {
-            setError3("Error desconocido al actualizar la contraseña");
+            setError3("Error desconocido al eliminar la cuenta");
           }
         });
     }
