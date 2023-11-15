@@ -57,7 +57,8 @@ app.post('/obtener-debito', async (req, res) => {
   try {
     const { userId } = req.body;
     const debitCards = await db.manyOrNone('SELECT * FROM debit WHERE accountNumber = $1', [userId]);
-    res.status(200).json(debitCards);
+    const debitCardsWithType = debitCards.map(card => ({ ...card, type: 'Debito' }));
+    res.status(200).json(debitCardsWithType);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener tarjetas de débito' });
@@ -67,7 +68,8 @@ app.post('/obtener-credito', async (req, res) => {
   try {
     const { userId } = req.body;
     const creditCards = await db.manyOrNone('SELECT * FROM credit WHERE accountNumber = $1', [userId]);
-    res.status(200).json(creditCards);
+    const creditCardsWithType = creditCards.map(card => ({ ...card, type: 'Credito' }));
+    res.status(200).json(creditCardsWithType);
 
   } catch (error) {
     console.error(error);
@@ -222,6 +224,16 @@ app.post('/actualizar-cash', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar el cash de la tarjeta de débito' });
+  }
+});
+app.post('/guardar-gasto', async (req, res) => {
+  try {
+    const { cardid, userid, mount, category, business, date, type, installments } = req.body;
+    await db.none('INSERT INTO expenses (cardid, userid, mount, category, business, date, type, installments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardid, userid, mount, category, business, date, type, installments]);
+    res.status(201).json({ message: 'Datos almacenados con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al guardar los datos en la base de datos' });
   }
 });
 const PORT = process.env.PORT || 3000;

@@ -16,7 +16,7 @@ const logoStyles = {
   width: '50px',
   height: 'auto',
 };
-function NavBar({ onCards, onMain, onAccount, onLogoff }) {
+function NavBar({ onCards, onMain, onAccount, onExpenses, onLogoff }) {
   //Lineas comentadas para no mostrar advertencias en terminal (No se usan aún)
   /*const [anchorElNav, setAnchorElNav] = React.useState(null);*/
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -34,7 +34,7 @@ function NavBar({ onCards, onMain, onAccount, onLogoff }) {
   };
   return (
     <AppBar className="whiteNavBar" position="static" sx={{ backgroundColor: 'white', boxShadow: '0px 0px 20px white', width: "80%" }}>
-      <Container maxWidth="xl" maxHeight="x0.5">
+      <Container>
         <Toolbar disableGutters>
           {/* Logo de la version completa */}
           <img src={logoImage} alt="Logo" style={logoStyles} className="logo1" onClick={onMain}></img>
@@ -47,8 +47,7 @@ function NavBar({ onCards, onMain, onAccount, onLogoff }) {
               Mis Tarjetas
             </Button>
             <Button
-              disabled
-              //onClick={handleCloseNavMenu}
+              onClick={onExpenses}
               sx={{ my: 2, color: 'black', display: 'block' }}
             >
               Mis Gastos

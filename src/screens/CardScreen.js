@@ -7,8 +7,11 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+import '../App.css';
 
-function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
+function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModify }) {
   //Logica para obtener las Tarjetas
   const userId = Cookies.get('userId');
   const [debitCards, setDebitCards] = useState([]);
@@ -58,16 +61,20 @@ function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
     }
   };
   return (
-    <div>
-      <Stack className="whiteBoxCS" direction="column" justifyContent="center" alignItems="center" spacing={3}>
-        <br />
-        <h2>Mis Tarjetas</h2>
+    <div className="whiteBoxCS" direction="column" justifyContent="center" spacing={3}>
+      <br />
+      <IconButton color="primary" aria-label="back to login" onClick={() => onBack()}>
+        <ArrowBackIcon />
+      </IconButton>
+      <Stack direction="column" spacing={3}> 
+
+        
         {debitCards.length === 0 && creditCards.length === 0 ? (
           <p>No se ha registrado ninguna tarjeta. Comienza agregando una!</p>
         ) : (
           <div style={{ maxHeight: "250px", overflowY: "auto" }}>
             <ul>
-              <Stack direction="column" alignItems="center" spacing={5}>
+              <Stack direction="column" spacing={5}>
                 {debitCards.map((debitCard) => (
                   <li key={debitCard.id}>
                     <Card variant="outlined" sx={{ minWidth: 350 }}>
@@ -75,7 +82,7 @@ function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom> Tarjeta Débito </Typography>
                         <Typography variant="h5" component="div"> {formatCardSeparation(debitCard.cardnumber)} </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
-                        <Stack direction="row" alignItems="center" spacing={2}>
+                        <Stack direction="row" spacing={2}>
                           <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(debitCard.expiredate)} </Typography>
                           <Typography variant="body2"> Moneda <br /> {debitCard.coin} </Typography>
                           <Typography variant="body2"> Disponible <br /> {debitCard.cash} </Typography>
@@ -92,7 +99,7 @@ function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
               </Stack>
             </ul>
             <ul>
-              <Stack direction="row" alignItems="center" spacing={5}>
+              <Stack direction="row" spacing={5}>
                 {creditCards.map((creditCard) => (
                   <li key={creditCard.id}>
                     <Card variant="outlined" sx={{ minWidth: 350 }}>
@@ -100,7 +107,7 @@ function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom> Tarjeta Crédito </Typography>
                         <Typography variant="h5" component="div"> {formatCardSeparation(creditCard.cardnumber)} </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
-                        <Stack direction="row" alignItems="center" spacing={2}>
+                        <Stack direction="row" spacing={2}>
                           <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(creditCard.expiredate)} </Typography>
                           <Typography variant="body2"> Moneda <br /> {creditCard.coin} </Typography>
                           <Typography variant="body2"> Linea Cr <br /> {creditCard.creditline} </Typography>
@@ -118,7 +125,7 @@ function CardScreen({ onRegister, onIncome, onDebitModify, onCreditModify }) {
             </ul>
           </div>
         )}
-        <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <Stack direction="row" justifyContent="center" spacing={2}>
           <Button variant="outlined" onClick={() => onRegister()}>Agregar Tarjeta</Button>
         </Stack>
       </Stack>

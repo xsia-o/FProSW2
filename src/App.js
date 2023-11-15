@@ -9,6 +9,7 @@ import RegisterCard from './screens/RegisterCard';
 import DebitModify from './screens/DebitModify';
 import CreditModify from './screens/CreditModify';
 import RegisterIncome from './screens/RegisterIncome';
+import RegisterExpense from './screens/RegisterExpense';
 import NavBar from './screens/NavBar';
 
 function App() {
@@ -58,14 +59,21 @@ function App() {
             />
           )}
           {currentPage === 'expensesscreen' && (
-            <ExpensesScreen onBack={() => handleNavigation('frontpage')} />
+            <ExpensesScreen
+              onBack={() => handleNavigation('frontpage')}
+              onRegister={() => handleNavigation('registerexpense')} />
+          )}
+          {currentPage === 'registerexpense' && (
+            <RegisterExpense
+              onBack={() => handleNavigation('expensesscreen')} />
           )}
           {currentPage === 'accountpage' && (
-            <AccountPage 
-            onBack={() => handleNavigation('frontpage')} 
-            onLogoff={() => {
-              setIsLoggedIn(false);
-              handleNavigation('login');}} />
+            <AccountPage
+              onBack={() => handleNavigation('frontpage')}
+              onLogoff={() => {
+                setIsLoggedIn(false);
+                handleNavigation('login');
+              }} />
           )}
           {currentPage === 'registerCard' && (
             <RegisterCard onBack={() => handleNavigation('cardscreen')} />
