@@ -67,6 +67,7 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
         <ArrowBackIcon />
       </IconButton>
       <Stack direction="column" spacing={3}>
+        <h2>Mis Tarjetas</h2>
 
 
         {debitCards.length === 0 && creditCards.length === 0 ? (

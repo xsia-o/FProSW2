@@ -249,6 +249,18 @@ app.post('/guardar-gasto', async (req, res) => {
     res.status(500).json({ error: 'Error al guardar los datos en la base de datos' });
   }
 });
+app.post('/eliminar-gasto', async (req, res) => {
+  try {
+    const { expenseId } = req.body;
+    const installmentExpenseId = expenseId.toString();
+    await db.none('DELETE FROM expenses WHERE id = $1', [expenseId]);
+    await db.none('DELETE FROM expensesInstallments WHERE expenseid = $1', [installmentExpenseId]);
+    res.status(200).json({ message: 'Tarjeta de débito eliminada con éxito' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de débito' });
+  }
+});
 app.post('/obtener-gastos', async (req, res) => {
   try {
     const { userId } = req.body;
@@ -259,6 +271,7 @@ app.post('/obtener-gastos', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener gastos' });
   }
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);
