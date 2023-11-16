@@ -229,11 +229,34 @@ app.post('/actualizar-cash', async (req, res) => {
 app.post('/guardar-gasto', async (req, res) => {
   try {
     const { cardid, userid, mount, category, business, date, type, installments } = req.body;
-    await db.none('INSERT INTO expenses (cardid, userid, mount, category, business, date, type, installments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [cardid, userid, mount, category, business, date, type, installments]);
+    const expenseDate = new Date(date);
+    const result = await db.one('INSERT INTO expenses (cardid, userid, mount, category, business, date, type, installments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', [cardid, userid, mount, category, business, expenseDate, type, installments]);
+    
+    if (installments > 1) {
+      const installment = mount / installments;
+      const expenseid = result.id;
+      for (let i = 0; i < installments; i++) {
+        
+        const installmentDate = new Date(expenseDate);
+        installmentDate.setMonth(expenseDate.getMonth() + i);
+        await db.none('INSERT INTO expensesInstallments (expenseid, installment, date) VALUES ($1, $2, $3)', [expenseid, installment, installmentDate]);
+      }
+    }
+
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al guardar los datos en la base de datos' });
+  }
+});
+app.post('/obtener-gastos', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const expenses = await db.manyOrNone('SELECT * FROM expenses WHERE userid = $1', [userId]);
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener gastos' });
   }
 });
 const PORT = process.env.PORT || 3000;

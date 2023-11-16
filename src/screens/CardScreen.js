@@ -66,9 +66,9 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
       <IconButton color="primary" aria-label="back to login" onClick={() => onBack()}>
         <ArrowBackIcon />
       </IconButton>
-      <Stack direction="column" spacing={3}> 
+      <Stack direction="column" spacing={3}>
 
-        
+
         {debitCards.length === 0 && creditCards.length === 0 ? (
           <p>No se ha registrado ninguna tarjeta. Comienza agregando una!</p>
         ) : (
