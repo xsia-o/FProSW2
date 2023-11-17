@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Stack, TextField, Button } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../App.css';
+
 function DebitModify({ onBack }) {
-    //Logica para obtener Datos Almacenados
+    const debitCardId = Cookies.get('debitCardId'); // Se obtiene la Tarjeta de Debito Actual
     const [formData, setFormData] = useState({
         cardNumber: '',
         accountNumber: '',
         expireDate: null,
         coin: '',
-    });
+    }); //Data de formulario
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value,
         });
-    };
+    }; //Encargado de manejar los cambios del formulario (En vivo y en directo)
+
+    const handleDateChange = (name, date) => {
+        setFormData({
+            ...formData,
+            [name]: date,
+        });
+    }; //Encargado de manejar las fechas del formulario
+
     useEffect(() => {
         const debitCardId = Cookies.get('debitCardId');
         if (debitCardId) {
@@ -39,10 +47,9 @@ function DebitModify({ onBack }) {
                     console.error('Error al obtener la tarjeta de débito:', error);
                 });
         }
-    }, []);
-    //Logica para actualizar Tarjeta Debito
+    }, []); //Se obtendra la informacion de la Tarjeta de Debito Actual
+
     const updateDebitCard = () => {
-        const debitCardId = Cookies.get('debitCardId');
         if (debitCardId) {
             axios.post('http://localhost:3000/actualizar-debito', {
                 debitCardId,
@@ -50,7 +57,6 @@ function DebitModify({ onBack }) {
                 accountNumber: formData.accountNumber,
                 expireDate: formData.expireDate,
                 coin: formData.coin,
-                
             })
                 .then((response) => {
                     console.log('Tarjeta de débito actualizada con éxito');
@@ -59,15 +65,9 @@ function DebitModify({ onBack }) {
                     console.error('Error al actualizar la tarjeta de débito:', error);
                 });
         }
-    };
-    //Logica para Fechas
-    const handleDateChange = (name, date) => {
-        setFormData({
-            ...formData,
-            [name]: date,
-        });
-    };
-    //Logica para correcto formato (Faltan fechas)
+    }; //Función para poder actualizar la Tarjeta de Debito Actual
+
+    //Código necesario para un correcto formato
     const isValidCardNumber = (cardNumber) => {
         const cardNumberRegex = /^\d{16}$/;
         return cardNumber === '' || cardNumberRegex.test(cardNumber);
@@ -75,58 +75,42 @@ function DebitModify({ onBack }) {
     const isValidCoin = (coin) => {
         return coin === '' || coin.length <= 10;
     };
-    
+
+    //Propiedades comunes de la página
+    const stackProps = {
+        justifyContent: "center",
+        alignItems: "center",
+        spacing: 2,
+    }
+    const rowStackProps = {
+        direction: "row",
+        ...stackProps,
+    };
+    const columnStackProps = {
+        direction: "column",
+        ...stackProps,
+    };
     return (
-        <div>
-            <Stack className="whiteBoxDM" direction="column" justifyContent="center" alignItems="center" spacing={2}>
+        <div className='whiteBoxDM'> {/*Caja Blanca*/}
+            <Stack {...columnStackProps}> {/*Formulario de Modificacion de Tarjeta de Credito*/}
                 <h2>Modificar Tarjeta Debito</h2>
                 <p>Completa los datos de tu tarjeta:</p>
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="Numero de Tarjeta"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleChange}
+                <Stack {...rowStackProps}>
+                    <TextField required label="Numero de Tarjeta" name="cardNumber" value={formData.cardNumber} onChange={handleChange}
                         error={!isValidCardNumber(formData.cardNumber)}
                         helperText={
-                            !isValidCardNumber(formData.cardNumber) ? 'Número de tarjeta inválido' : ''
-                        }
-                    />
+                            !isValidCardNumber(formData.cardNumber) ? 'Número de tarjeta inválido' : ''} />
                 </Stack>
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                <Stack {...rowStackProps}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Fecha de Vencimiento"
-                            name="expireDate"
-                            value={formData.expireDate}
-                            views={['month', 'year']}
-                            onChange={(date) => handleDateChange("expireDate", date)}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
+                        <DatePicker label="Fecha de Vencimiento" name="expireDate" value={formData.expireDate} views={['month', 'year']} onChange={(date) => handleDateChange("expireDate", date)} />
                     </LocalizationProvider>
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="Moneda"
-                        name="coin"
-                        value={formData.coin}
-                        onChange={handleChange}
+                    <TextField required label="Moneda" name="coin" value={formData.coin} onChange={handleChange}
                         error={!isValidCoin(formData.coin)}
-                        helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''}
-                    />
+                        helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''} />
                 </Stack>
-                <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            updateDebitCard();
-                            onBack();
-                        }}
-                    >
-                        Actualizar Débito
-                    </Button>
+                <Stack {...rowStackProps}>
+                    <Button variant="contained" onClick={() => { updateDebitCard(); onBack(); }} > Actualizar Débito </Button>
                 </Stack>
             </Stack>
         </div>

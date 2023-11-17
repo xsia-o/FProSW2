@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Stack, Button, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import '../App.css';
 
 function AccountPage({ onBack, onLogoff }) {
-  //Logica para obtener datos almacenados
-  const [error, setError] = useState('');
-  const [error2, setError2] = useState('');
-  const [error3, setError3] = useState('');
+  const userId = Cookies.get('userId');       // Se obtiene el UserId de las "Cookies"
+  const [error, setError] = useState('');     //Alerta de error para el Editar Cuenta
+  const [error2, setError2] = useState('');   //Alerta de error para el Cambiar Contraseña
+  const [error3, setError3] = useState('');   //Alerta de error para el Eliminar Cuenta
   const [formData, setFormData] = useState({
     fname: '',
     lname: '',
     email: '',
     phone: '',
     username: '',
+    dni: '',
+    age: '',
     password4Update: '',
     password4Delete: '',
     password2Update: '',
     newPass: '',
     newPassVali: '',
-    dni: '',
-    age: '',
-  });
+  });  //Data de formulario, para las 3 partes: Editar, Cambiar, y Eliminar
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  };
+  }; //Encargado de manejar los cambios de cada formulario (En vivo y en directo)
+
   useEffect(() => {
-    const userId = Cookies.get('userId');
+    let userId = Cookies.get('userId');
     if (userId) {
       axios.post('http://localhost:3000/obtener-cuenta', { userId })
         .then((response) => {
@@ -57,11 +53,10 @@ function AccountPage({ onBack, onLogoff }) {
           console.error('Error al obtener cuenta.', error);
         });
     }
-  }, []);
+  }, []); //Se obtendra la cuenta una vez se cargue la pagina
 
-  //Logica para actualizar y borrar Cuenta
+
   const updateAccount = () => {
-    const userId = Cookies.get('userId');
     if (userId) {
       axios.post('http://localhost:3000/actualizar-cuenta', {
         userId,
@@ -86,9 +81,9 @@ function AccountPage({ onBack, onLogoff }) {
           }
         });
     }
-  };
+  }; //Función para poder obtener actualizar la cuenta
+
   const updatePassword = () => {
-    const userId = Cookies.get('userId');
     if (userId) {
       axios.post('http://localhost:3000/actualizar-contrasena', {
         userId,
@@ -108,9 +103,9 @@ function AccountPage({ onBack, onLogoff }) {
           }
         });
     }
-  };
+  }; //Función para poder actualizar la contraseña
+
   const closeAccount = () => {
-    const userId = Cookies.get('userId');
     if (userId) {
       axios.post('http://localhost:3000/eliminar-cuenta', {
         userId,
@@ -128,8 +123,9 @@ function AccountPage({ onBack, onLogoff }) {
           }
         });
     }
-  };
-  //Logica para correcto formato
+  }; //Función para poder borrar o cerrar la cuenta
+
+  //Código necesario para un correcto formato
   const [fieldErrors, setFieldErrors] = useState({
     email: '',
     phone: '',
@@ -149,17 +145,32 @@ function AccountPage({ onBack, onLogoff }) {
   const handleDniChange = (e) => { handleFieldChange('dni', e.target.value, /^\d{8}$/, 'Documento Inválido'); };
   const handleAgeChange = (e) => { handleFieldChange('age', e.target.value, /^\d+$/, 'Formato Inválida'); };
 
-  //Logica para Mostrar/Ocultar contraseña 
+  //Código necesario para poder ocultar o mostrar la contraseña 
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  //Propiedades comunes de la página
+  const stackProps = {
+    justifyContent: "center",
+    alignItems: "center",
+    spacing: 2,
+  }
+  const rowStackProps = {
+    direction: "row",
+    ...stackProps,
+  };
+  const columnStackProps = {
+    direction: "column",
+    ...stackProps,
+  };
   const passwordProps = {
     endAdornment: (
       <InputAdornment position="end">
         <IconButton
-          aria-label="toggle password visibility"
+          aria-label="Toggle Password Visibility"
           onClick={handleClickShowPassword}
           onMouseDown={handleMouseDownPassword}
           edge="end"
@@ -169,63 +180,59 @@ function AccountPage({ onBack, onLogoff }) {
       </InputAdornment>
     ),
   };
-  const rowStackProps = {
-    direction: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    spacing: 2,
-  };
-  const columnStackProps = {
-    direction: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    spacing: 2,
-  };
 
   return (
-    <div className='whiteBoxRP' style={{ maxHeight: "400px", overflowY: "auto" }}>
-      <IconButton color="primary" aria-label="back to login" onClick={() => onBack()}>
+    <div className='whiteBoxRP'> {/*Caja Blanca*/}
+      <br />
+      <IconButton color="primary" aria-label="Back to FrontPage" onClick={() => onBack()}>
         <ArrowBackIcon />
       </IconButton>
       <Stack {...columnStackProps}>
-        <h2>Mi Cuenta</h2>
+        <h2>Mi Cuenta</h2> {/*Formulario de Editar Cuenta*/}
         <p>Aqui puedes administrar tu cuenta</p>
-        <Stack {...rowStackProps}>
-          <TextField required label="Nombres" name="fname" value={formData.fname} onChange={handleChange} />
-          <TextField required label="Apellidos" name="lname" value={formData.lname} onChange={handleChange} />
-        </Stack>
-        <Stack {...rowStackProps}>
-          <TextField required label="Correo Electrónico" name="email" value={formData.email} onChange={handleEmailChange} error={fieldErrors.email !== ''} helperText={fieldErrors.email} />
-          <TextField required label="Telefono" name="phone" value={formData.phone} onChange={handlePhoneChange} error={fieldErrors.phone !== ''} helperText={fieldErrors.phone} />
-        </Stack>
-        <Stack {...rowStackProps}>
-          <TextField required label="Documento de Identidad" name="dni" value={formData.dni} onChange={handleDniChange} error={fieldErrors.dni !== ''} helperText={fieldErrors.dni} />
-          <TextField required label="Edad" name="age" value={formData.age} onChange={handleAgeChange} error={fieldErrors.age !== ''} helperText={fieldErrors.age} />
-        </Stack>
-        <Stack {...rowStackProps}>
-          <TextField label="Username" name="username" value={formData.username} onChange={handleChange} />
-          <TextField label="Contraseña" type={showPassword ? 'text' : 'password'} name="password4Update" value={formData.password4Update} onChange={handleChange} InputProps={passwordProps} />
-        </Stack>
-        <Stack {...columnStackProps}>
-          <Button variant="contained" onClick={() => { updateAccount(); }} > Actualizar Cuenta </Button>
-        </Stack>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        <h2>Cambiar contraseña</h2>
-        <Stack {...rowStackProps}>
-          <TextField label="Contraseña antigua" type={showPassword ? 'text' : 'password'} name="password2Update" value={formData.password2Update} onChange={handleChange} InputProps={passwordProps} />
-        </Stack>
-        <Stack {...rowStackProps}>
-          <TextField label="Contraseña nueva" type={showPassword ? 'text' : 'password'} name="newPass" value={formData.newPass} onChange={handleChange} InputProps={passwordProps} />
-          <TextField label="Confirmar contraseña" type={showPassword ? 'text' : 'password'} name="newPassVali" value={formData.newPassVali} onChange={handleChange} InputProps={passwordProps} />
-        </Stack>
-        <Button variant="contained" onClick={() => { updatePassword(); }} > Cambiar Contraseña </Button>
-        {error2 && <div style={{ color: 'red' }}>{error2}</div>}
-        <h2>Cerrar cuenta</h2>
-        <Stack {...rowStackProps}>
-          <TextField label="Contraseña" type={showPassword ? 'text' : 'password'} name="password4Delete" value={formData.password4Delete} onChange={handleChange} InputProps={passwordProps} />
-        </Stack>
-        <Button color="error" variant="contained" onClick={() => { closeAccount(); }} > Borrar Cuenta </Button>
-        {error3 && <div style={{ color: 'red' }}>{error3}</div>}
+        <div style={{ maxHeight: "650px", overflowY: "auto" }}> {/*Deslizante*/}
+          <Stack {...columnStackProps}>
+            <br />
+            <Stack {...rowStackProps}>
+              <TextField required label="Nombres" name="fname" value={formData.fname} onChange={handleChange} />
+              <TextField required label="Apellidos" name="lname" value={formData.lname} onChange={handleChange} />
+            </Stack>
+            <Stack {...rowStackProps}>
+              <TextField required label="Correo Electrónico" name="email" value={formData.email} onChange={handleEmailChange} error={fieldErrors.email !== ''} helperText={fieldErrors.email} />
+              <TextField required label="Telefono" name="phone" value={formData.phone} onChange={handlePhoneChange} error={fieldErrors.phone !== ''} helperText={fieldErrors.phone} />
+            </Stack>
+            <Stack {...rowStackProps}>
+              <TextField required label="Documento de Identidad" name="dni" value={formData.dni} onChange={handleDniChange} error={fieldErrors.dni !== ''} helperText={fieldErrors.dni} />
+              <TextField required label="Edad" name="age" value={formData.age} onChange={handleAgeChange} error={fieldErrors.age !== ''} helperText={fieldErrors.age} />
+            </Stack>
+            <Stack {...rowStackProps}>
+              <TextField label="Username" name="username" value={formData.username} onChange={handleChange} />
+              <TextField label="Contraseña" type={showPassword ? 'text' : 'password'} name="password4Update" value={formData.password4Update} onChange={handleChange} InputProps={passwordProps} />
+            </Stack>
+            <Stack {...columnStackProps}>
+              <Button variant="contained" onClick={() => { updateAccount(); }} > Actualizar Cuenta </Button>
+            </Stack>
+            {error && <div style={{ color: 'red' }}>{error}</div>}
+            <br />
+            <h2>Cambiar contraseña</h2> {/*Formulario de Editar Contraseña*/}
+            <Stack {...rowStackProps}>
+              <TextField label="Contraseña antigua" type={showPassword ? 'text' : 'password'} name="password2Update" value={formData.password2Update} onChange={handleChange} InputProps={passwordProps} />
+            </Stack>
+            <Stack {...rowStackProps}>
+              <TextField label="Contraseña nueva" type={showPassword ? 'text' : 'password'} name="newPass" value={formData.newPass} onChange={handleChange} InputProps={passwordProps} />
+              <TextField label="Confirmar contraseña" type={showPassword ? 'text' : 'password'} name="newPassVali" value={formData.newPassVali} onChange={handleChange} InputProps={passwordProps} />
+            </Stack>
+            <Button variant="contained" onClick={() => { updatePassword(); }} > Cambiar Contraseña </Button>
+            {error2 && <div style={{ color: 'red' }}>{error2}</div>}
+            <br />
+            <h2>Cerrar cuenta</h2> {/*Formulario de Eliminar Cuenta*/}
+            <Stack {...rowStackProps}>
+              <TextField label="Contraseña" type={showPassword ? 'text' : 'password'} name="password4Delete" value={formData.password4Delete} onChange={handleChange} InputProps={passwordProps} />
+            </Stack>
+            <Button color="error" variant="contained" onClick={() => { closeAccount(); }} > Borrar Cuenta </Button>
+            {error3 && <div style={{ color: 'red' }}>{error3}</div>}
+          </Stack>
+        </div>
       </Stack>
     </div>
   );
