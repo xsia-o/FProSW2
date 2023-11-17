@@ -7,9 +7,9 @@ import '../App.css';
 
 function AccountPage({ onBack, onLogoff }) {
   const userId = Cookies.get('userId');       // Se obtiene el UserId de las "Cookies"
-  const [error, setError] = useState('');     //Alerta de error para el Editar Cuenta
-  const [error2, setError2] = useState('');   //Alerta de error para el Cambiar Contraseña
-  const [error3, setError3] = useState('');   //Alerta de error para el Eliminar Cuenta
+  const [error, setError] = useState('');     // Alerta de error para el Editar Cuenta
+  const [error2, setError2] = useState('');   // Alerta de error para el Cambiar Contraseña
+  const [error3, setError3] = useState('');   // Alerta de error para el Eliminar Cuenta
   const [formData, setFormData] = useState({
     fname: '',
     lname: '',
@@ -188,10 +188,10 @@ function AccountPage({ onBack, onLogoff }) {
         <ArrowBackIcon />
       </IconButton>
       <Stack {...columnStackProps}>
-        <h2>Mi Cuenta</h2> {/*Formulario de Editar Cuenta*/}
+        <h2>Mi Cuenta</h2> 
         <p>Aqui puedes administrar tu cuenta</p>
         <div style={{ maxHeight: "650px", overflowY: "auto" }}> {/*Deslizante*/}
-          <Stack {...columnStackProps}>
+          <Stack {...columnStackProps}> {/*Formulario de Editar Cuenta*/}
             <br />
             <Stack {...rowStackProps}>
               <TextField required label="Nombres" name="fname" value={formData.fname} onChange={handleChange} />

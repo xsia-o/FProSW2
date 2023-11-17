@@ -45,7 +45,7 @@ function ExpensesScreen({ onBack, onRegister }) {
     } catch (error) {
       console.error('Error al eliminar gasto', error);
     }
-  }; //Funcion para eliminar los Gastos del Usuario, tanto Pagos Únicos, como Cuotas
+  }; //Funcion para eliminar los Gastos del Usuario, tanto Pagos Únicos, como Cuotas *FALTA CORREGIR*
 
   //Código necesario para un correcto formato
   function formatYearMonth(DateValue) {

@@ -6,9 +6,9 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import '../App.css';
 
 function FrontPage() {
-  const userId = Cookies.get('userId');                   // Se obtiene el UserId de las "Cookies"
-  const [expenses, setExpenses] = useState([]);           // Data de los Gastos Encontrados
-  const [filterDate, setFilterDate] = useState('total');  // Filtrado por Fecha
+  const userId = Cookies.get('userId');                  // Se obtiene el UserId de las "Cookies"
+  const [expenses, setExpenses] = useState([]);          // Data de los Gastos Encontrados
+  const [filterDate, setFilterDate] = useState('total'); // Filtrado por Fecha
 
   useEffect(() => {
     cargarGastos();

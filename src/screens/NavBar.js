@@ -1,21 +1,13 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import React from 'react';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, } from '@mui/material';
 import logoImage from '../resources/LogoSmall.png';
 import '../App.css';
+
 const logoStyles = {
   width: '50px',
   height: 'auto',
 };
+
 function NavBar({ onCards, onMain, onAccount, onExpenses, onLogoff }) {
   //Lineas comentadas para no mostrar advertencias en terminal (No se usan aún)
   /*const [anchorElNav, setAnchorElNav] = React.useState(null);*/
@@ -40,31 +32,15 @@ function NavBar({ onCards, onMain, onAccount, onExpenses, onLogoff }) {
           <img src={logoImage} alt="Logo" style={logoStyles} className="logo1" onClick={onMain}></img>
           {/* Opciones de la version completa */}
           <Box alignItems={'center'} sx={{ m: 2, flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              onClick={onCards}
-              sx={{ my: 2, color: 'black', display: 'block' }}
-            >
-              Mis Tarjetas
-            </Button>
-            <Button
-              onClick={onExpenses}
-              sx={{ my: 2, color: 'black', display: 'block' }}
-            >
-              Mis Gastos
-            </Button>
-            <Button
-              disabled
-              //onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'black', display: 'block' }}
-            >
-              Acerca de
-            </Button>
+            <Button onClick={onCards} sx={{ my: 2, color: 'black', display: 'block' }} > Mis Tarjetas </Button>
+            <Button onClick={onExpenses} sx={{ my: 2, color: 'black', display: 'block' }} > Mis Gastos </Button>
+            <Button sx={{ my: 2, color: 'black', display: 'block' }} > Acerca de </Button>
           </Box>
           {/* Menu de Perfil para ambas versiones */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Account Icon" /*src="/static/images/avatar/2.jpg"*/ />
               </IconButton>
             </Tooltip>
             <Menu
@@ -83,12 +59,8 @@ function NavBar({ onCards, onMain, onAccount, onExpenses, onLogoff }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={onAccount}>
-                <Typography textAlign="center">Mi Cuenta</Typography>
-              </MenuItem>
-              <MenuItem onClick={onLogoff}>
-                <Typography textAlign="center">Cerrar Sesion</Typography>
-              </MenuItem>
+              <MenuItem onClick={onAccount}> <Typography textAlign="center">Mi Cuenta</Typography> </MenuItem>
+              <MenuItem onClick={onLogoff}> <Typography textAlign="center">Cerrar Sesion</Typography> </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
