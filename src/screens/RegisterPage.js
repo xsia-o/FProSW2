@@ -6,11 +6,13 @@ import { Visibility, VisibilityOff, ArrowBack as ArrowBackIcon } from '@mui/icon
 import '../App.css';
 
 function RegisterPage({ onNavigate }) {
-  const [error, setError] = useState('');     // Alerta de error en el Formulario
+  //Inicializacion de Valores. Ej: Elemento,SetElemento = useState(ValorInicialdeElemento)
+  const [error, setError] = useState('');     
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = useState({
     fname: '',
     lname: '',
@@ -46,7 +48,6 @@ function RegisterPage({ onNavigate }) {
   }; //Funcion para registrar Usuario
 
   //Código necesario para un correcto formato
-
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
@@ -80,7 +81,6 @@ function RegisterPage({ onNavigate }) {
   };
 
   //Código necesario para poder ocultar o mostrar la contraseña 
-  const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -115,7 +115,6 @@ function RegisterPage({ onNavigate }) {
     ),
   };
 //Codigo necesario para permitir Registrar
-
 const handleTermsAcceptance = () => {
   setTermsAccepted(!termsAccepted);
 };
