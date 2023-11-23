@@ -7,6 +7,10 @@ import '../App.css';
 
 function RegisterPage({ onNavigate }) {
   const [error, setError] = useState('');     // Alerta de error en el Formulario
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [formData, setFormData] = useState({
     fname: '',
     lname: '',
@@ -42,8 +46,7 @@ function RegisterPage({ onNavigate }) {
   }; //Funcion para registrar Usuario
 
   //Código necesario para un correcto formato
-  const [emailError, setEmailError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
+
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
@@ -62,12 +65,7 @@ function RegisterPage({ onNavigate }) {
     setFormData({ ...formData, phone });
     setPhoneError(phone.trim() !== '' && !isValidPhone(phone) ? 'Formato Inválido' : '');
   };
-  //Codigo necesario para permitir Registrar
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const handleTermsAcceptance = () => {
-    setTermsAccepted(!termsAccepted);
-  };
+  
   const checkFormCompletion = () => {
     const { fname, lname, email, phone, username, password } = formData;
     return fname &&
@@ -116,7 +114,11 @@ function RegisterPage({ onNavigate }) {
       </InputAdornment>
     ),
   };
+//Codigo necesario para permitir Registrar
 
+const handleTermsAcceptance = () => {
+  setTermsAccepted(!termsAccepted);
+};
   return (
     <div className='whiteBoxRP'> {/*Caja Blanca*/}
       <IconButton color="primary" aria-label="back to login" onClick={() => onNavigate()}>

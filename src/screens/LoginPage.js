@@ -8,6 +8,8 @@ import logoImage from '../resources/LogoNormal.png';
 
 function LoginPage({ onRegister, onLogin }) {
   const [error, setError] = useState('');    //Alerta de error para el Formulario
+  const [emailError, setEmailError] = useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,7 +40,7 @@ function LoginPage({ onRegister, onLogin }) {
   }; //Función encargada de iniciar sesion
 
   //Código necesario para un correcto formato
-  const [emailError, setEmailError] = useState('');
+
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
@@ -49,7 +51,7 @@ function LoginPage({ onRegister, onLogin }) {
     setEmailError(email.trim() !== '' && !isValidEmail(email) ? 'Correo electrónico inválido' : '');
   };
   //Código necesario para poder ocultar o mostrar la contraseña 
-  const [showPassword, setShowPassword] = React.useState(false);
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
