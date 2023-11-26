@@ -10,6 +10,7 @@ import DebitModify from './screens/DebitModify';
 import CreditModify from './screens/CreditModify';
 import RegisterIncome from './screens/RegisterIncome';
 import RegisterExpense from './screens/RegisterExpense';
+import MonthlyLimitPage from './screens/MonthlyLimitPage';
 import NavBar from './screens/NavBar';
 
 function App() {
@@ -48,7 +49,16 @@ function App() {
       {isLoggedIn && (
         <div>
           <NavBar {...NavBarProps} />
-          {currentPage === 'frontpage' && <FrontPage />}
+          {currentPage === 'frontpage' &&
+            <FrontPage
+              onMonthlyLimit={() => handleNavigation('mlimitpage')}
+
+            />}
+          {currentPage === 'mlimitpage' &&
+            <MonthlyLimitPage
+              onBack={() => handleNavigation('frontpage')}
+
+            />}
           {currentPage === 'cardscreen' && (
             <CardScreen
               onBack={() => handleNavigation('frontpage')}

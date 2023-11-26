@@ -15,6 +15,14 @@ function LoginPage({ onRegister, onLogin }) {
     password: '',
   }); // Data de Formulario
 
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -35,7 +43,7 @@ function LoginPage({ onRegister, onLogin }) {
       }
     } catch (error) {
       setError('Credenciales Incorrectas');
-      console.error('Error al iniciar sesión', error);
+      handleRequestError(error);
     }
   }; //Función encargada de iniciar sesion
 

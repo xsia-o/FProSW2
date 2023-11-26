@@ -13,8 +13,15 @@ function DebitModify({ onBack }) {
         cardNumber: '',
         accountNumber: '',
         expireDate: null,
-        coin: '',
     }); //Data de formulario
+
+    const handleRequestError = (error) => {
+        if (error.response && error.response.data && error.response.data.error) {
+            console.error(error.response.data.error);
+        } else {
+            console.error("Error desconocido al actualizar la cuenta");
+        }
+    }; //Encargado de manejar los errores del servidor
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,11 +47,10 @@ function DebitModify({ onBack }) {
                     setFormData({
                         cardNumber: debitCardData.cardnumber,
                         accountNumber: debitCardData.accountnumber,
-                        coin: debitCardData.coin,
                     });
                 })
                 .catch((error) => {
-                    console.error('Error al obtener la tarjeta de débito:', error);
+                    handleRequestError(error);
                 });
         }
     }, []); //Se obtendra la informacion de la Tarjeta de Debito Actual
@@ -56,13 +62,12 @@ function DebitModify({ onBack }) {
                 cardNumber: formData.cardNumber,
                 accountNumber: formData.accountNumber,
                 expireDate: formData.expireDate,
-                coin: formData.coin,
             })
                 .then((response) => {
                     console.log('Tarjeta de débito actualizada con éxito');
                 })
                 .catch((error) => {
-                    console.error('Error al actualizar la tarjeta de débito:', error);
+                    handleRequestError(error);
                 });
         }
     }; //Función para poder actualizar la Tarjeta de Debito Actual
@@ -71,9 +76,6 @@ function DebitModify({ onBack }) {
     const isValidCardNumber = (cardNumber) => {
         const cardNumberRegex = /^\d{16}$/;
         return cardNumber === '' || cardNumberRegex.test(cardNumber);
-    };
-    const isValidCoin = (coin) => {
-        return coin === '' || coin.length <= 10;
     };
 
     //Propiedades comunes de la página
@@ -105,9 +107,7 @@ function DebitModify({ onBack }) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker label="Fecha de Vencimiento" name="expireDate" value={formData.expireDate} views={['month', 'year']} onChange={(date) => handleDateChange("expireDate", date)} />
                     </LocalizationProvider>
-                    <TextField required label="Moneda" name="coin" value={formData.coin} onChange={handleChange}
-                        error={!isValidCoin(formData.coin)}
-                        helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''} />
+
                 </Stack>
                 <Stack {...rowStackProps}>
                     <Button variant="contained" onClick={() => { updateDebitCard(); onBack(); }} > Actualizar Débito </Button>

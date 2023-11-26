@@ -25,6 +25,14 @@ function AccountPage({ onBack, onLogoff }) {
     newPassVali: '',
   });  //Data de formulario, para las 3 partes: Editar, Cambiar, y Eliminar
 
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
+   
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -50,7 +58,7 @@ function AccountPage({ onBack, onLogoff }) {
           });
         })
         .catch((error) => {
-          console.error('Error al obtener cuenta.', error);
+          handleRequestError(error);
         });
     }
   }, []); //Se obtendra la cuenta una vez se cargue la pagina
@@ -188,7 +196,7 @@ function AccountPage({ onBack, onLogoff }) {
         <ArrowBackIcon />
       </IconButton>
       <Stack {...columnStackProps}>
-        <h2>Mi Cuenta</h2> 
+        <h2>Mi Cuenta</h2>
         <p>Aqui puedes administrar tu cuenta</p>
         <div style={{ maxHeight: "650px", overflowY: "auto" }}> {/*Deslizante*/}
           <Stack {...columnStackProps}> {/*Formulario de Editar Cuenta*/}

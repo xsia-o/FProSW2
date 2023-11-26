@@ -7,7 +7,7 @@ import '../App.css';
 
 function RegisterPage({ onNavigate }) {
   //Inicializacion de Valores. Ej: Elemento,SetElemento = useState(ValorInicialdeElemento)
-  const [error, setError] = useState('');     
+  const [error, setError] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [emailError, setEmailError] = useState('');
@@ -21,6 +21,14 @@ function RegisterPage({ onNavigate }) {
     username: '',
     password: '',
   }); //Data de formulario
+
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +52,7 @@ function RegisterPage({ onNavigate }) {
       onNavigate();
     } catch (error) {
       setError('Correo ya registrado');
+      handleRequestError(error);
     }
   }; //Funcion para registrar Usuario
 
@@ -66,7 +75,7 @@ function RegisterPage({ onNavigate }) {
     setFormData({ ...formData, phone });
     setPhoneError(phone.trim() !== '' && !isValidPhone(phone) ? 'Formato Inválido' : '');
   };
-  
+
   const checkFormCompletion = () => {
     const { fname, lname, email, phone, username, password } = formData;
     return fname &&
@@ -114,10 +123,10 @@ function RegisterPage({ onNavigate }) {
       </InputAdornment>
     ),
   };
-//Codigo necesario para permitir Registrar
-const handleTermsAcceptance = () => {
-  setTermsAccepted(!termsAccepted);
-};
+  //Codigo necesario para permitir Registrar
+  const handleTermsAcceptance = () => {
+    setTermsAccepted(!termsAccepted);
+  };
   return (
     <div className='whiteBoxRP'> {/*Caja Blanca*/}
       <IconButton color="primary" aria-label="back to login" onClick={() => onNavigate()}>

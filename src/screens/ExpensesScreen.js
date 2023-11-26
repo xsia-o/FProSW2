@@ -12,6 +12,14 @@ function ExpensesScreen({ onBack, onRegister }) {
   const [filterCategory, setFilterCategory] = useState(''); // Categoría a filtrar
   const [sortBy, setSortBy] = useState('');                 // Criterio de ordenamiento
 
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
+
   useEffect(() => {
     cargarGastos();
     // eslint-disable-next-line
@@ -34,7 +42,7 @@ function ExpensesScreen({ onBack, onRegister }) {
       }
       setExpenses(filteredExpenses);
     } catch (error) {
-      console.error('Error al cargar gastos', error);
+      handleRequestError(error);
     }
   }; //Funcion para obtener los Gastos Filtrados del Usuario
 
@@ -43,7 +51,7 @@ function ExpensesScreen({ onBack, onRegister }) {
       await axios.post('http://localhost:3000/eliminar-gasto', { expenseId });
       cargarGastos();
     } catch (error) {
-      console.error('Error al eliminar gasto', error);
+      handleRequestError(error);
     }
   }; //Funcion para eliminar los Gastos del Usuario, tanto Pagos Únicos, como Cuotas *FALTA CORREGIR*
 
@@ -70,14 +78,14 @@ function ExpensesScreen({ onBack, onRegister }) {
     alignItems: "center",
     spacing: 2,
   };
-  
+
   return (
     <div className='whiteBoxRP'> {/*Caja Blanca*/}
       <br />
       <IconButton color="primary" aria-label="Back to FrontPage" onClick={() => onBack()}>
         <ArrowBackIcon />
       </IconButton>
-      <Stack {...columnStackProps}> 
+      <Stack {...columnStackProps}>
         <h2>Mis Gastos</h2>
         <Stack {...rowStackProps}> {/*Stack contenedor de selects de Filtrado*/}
           <label>Tipo:</label>

@@ -26,6 +26,14 @@ function RegisterExpense({ onBack }) {
         installments: '1',
     }); // Data de Formulario
 
+    const handleRequestError = (error) => {
+        if (error.response && error.response.data && error.response.data.error) {
+            console.error(error.response.data.error);
+        } else {
+            console.error("Error desconocido al actualizar la cuenta");
+        }
+    }; //Encargado de manejar los errores del servidor
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -65,7 +73,7 @@ function RegisterExpense({ onBack }) {
                 const lresponse = await axios.post('http://localhost:3000/obtener-credito', { userId });
                 setCreditCards(lresponse.data);
             } catch (error) {
-                console.error('Error al obtener tarjetas de débito', error);
+                handleRequestError(error);
             }
         };
         fetchData();
@@ -78,7 +86,7 @@ function RegisterExpense({ onBack }) {
             await axios.post('http://localhost:3000/guardar-gasto', newExpense);
             console.log('Datos enviados con éxito');
         } catch (error) {
-            console.error('Error al enviar los datos:', error);
+            handleRequestError(error);
         }
         onBack();
     }; //Funcion para poder Registar Gasto

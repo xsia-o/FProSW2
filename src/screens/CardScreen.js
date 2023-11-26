@@ -10,6 +10,14 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
   const [debitCards, setDebitCards] = useState([]);     //Data de las Tarjetas Debito Obtenidas
   const [creditCards, setCreditCards] = useState([]);   //Data de las Tarjetas Credito Obtenidas
 
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
+
   useEffect(() => {
     cargarTarjetas();
   }); //Se obtendran las tarjetas una vez se cargue la pagina
@@ -21,7 +29,7 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
       setDebitCards(responseDebit.data);
       setCreditCards(responseCredit.data);
     } catch (error) {
-      console.error('Error al cargar tarjetas:', error);
+      handleRequestError(error);
     }
   }; //Función para obtener todas las tarjetas del usuario
 
@@ -34,7 +42,7 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
       }
       cargarTarjetas();
     } catch (error) {
-      console.error(`Error al eliminar tarjeta de ${tipoTarjeta}:`, error);
+      handleRequestError(error);
     }
   }; //Funcion para poder eliminar la tarjeta
 
@@ -46,13 +54,20 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
     const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}`;
     return formattedDate;
   }
+  function formatMonthDay(DateValue) {
+    const date = new Date(DateValue);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const formattedDate = `${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+    return formattedDate;
+  }
   function formatCardSeparation(StringValue) {
     const part1 = StringValue.substring(0, 3);
     const lastpart = StringValue.substring(13, 16);
     const result = part1 + "*   ****    ****   *" + lastpart;
     return result;
   }
-  
+
   //Propiedades comunes de la página
   const stackProps = {
     justifyContent: "center",
@@ -92,7 +107,7 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
                         <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
                         <Stack {...rowStackProps}>
                           <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(debitCard.expiredate)} </Typography>
-                          <Typography variant="body2"> Moneda <br /> {debitCard.coin} </Typography>
+                          <Typography variant="body2"> Moneda <br /> Soles </Typography>
                           <Typography variant="body2"> Disponible <br /> {debitCard.cash} </Typography>
                         </Stack>
                       </CardContent>
@@ -117,9 +132,9 @@ function CardScreen({ onBack, onRegister, onIncome, onDebitModify, onCreditModif
                         <Typography sx={{ mb: 1.5 }} color="text.secondary"> Número de Tarjeta </Typography>
                         <Stack {...rowStackProps}>
                           <Typography variant="body2"> Fecha Exp <br /> {formatYearMonth(creditCard.expiredate)} </Typography>
-                          <Typography variant="body2"> Moneda <br /> {creditCard.coin} </Typography>
+                          <Typography variant="body2"> Moneda <br /> Soles </Typography>
                           <Typography variant="body2"> Linea Cr <br /> {creditCard.creditline} </Typography>
-                          <Typography variant="body2"> Disponible <br /> {creditCard.creditcash} </Typography>
+                          <Typography variant="body2"> Fecha Pago <br /> {formatMonthDay(creditCard.lastdaypayment)} </Typography>
                         </Stack>
                       </CardContent>
                       <CardActions sx={{ justifyContent: 'space-between' }}> {/*Acciones respectivas a la Tarjeta Credito*/}

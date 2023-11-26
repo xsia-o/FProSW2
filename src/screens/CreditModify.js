@@ -13,13 +13,20 @@ function CreditModify({ onBack }) {
         cardNumber: '',
         accountNumber: '',
         expireDate: null,
-        coin: '',
         billingDate: null,
         interestRate: '',
         creditLine: '',
         lastDayPayment: null,
         insurance: '',
     }); //Data de formulario
+
+    const handleRequestError = (error) => {
+        if (error.response && error.response.data && error.response.data.error) {
+            console.error(error.response.data.error);
+        } else {
+            console.error("Error desconocido al actualizar la cuenta");
+        }
+    }; //Encargado de manejar los errores del servidor
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,14 +52,13 @@ function CreditModify({ onBack }) {
                     setFormData({
                         cardNumber: creditCardData.cardnumber,
                         accountNumber: creditCardData.accountnumber,
-                        coin: creditCardData.coin,
                         interestRate: creditCardData.interestrate,
                         creditLine: creditCardData.creditline,
                         insurance: creditCardData.insurance,
                     });
                 })
                 .catch((error) => {
-                    console.error('Error al obtener la tarjeta de crédito:', error);
+                    handleRequestError(error);
                 });
         }
     }, []); //Se obtendra la informacion de la Tarjeta de Credito Actual
@@ -64,7 +70,6 @@ function CreditModify({ onBack }) {
                 cardNumber: formData.cardNumber,
                 accountNumber: formData.accountNumber,
                 expireDate: formData.expireDate,
-                coin: formData.coin,
                 billingDate: formData.billingDate,
                 interestRate: formData.interestRate,
                 creditLine: formData.creditLine,
@@ -75,7 +80,7 @@ function CreditModify({ onBack }) {
                     console.log('Tarjeta de crédito actualizada con éxito');
                 })
                 .catch((error) => {
-                    console.error('Error al actualizar la tarjeta de crédito:', error);
+                    handleRequestError(error);
                 });
         }
     }; //Función para poder actualizar la Tarjeta de Credito Actual
@@ -84,9 +89,6 @@ function CreditModify({ onBack }) {
     const isValidCardNumber = (cardNumber) => {
         const cardNumberRegex = /^\d{16}$/;
         return cardNumber === '' || cardNumberRegex.test(cardNumber);
-    };
-    const isValidCoin = (coin) => {
-        return coin === '' || coin.length <= 10;
     };
     const isValidCreditLine = (creditLine) => {
         return creditLine === '' || (!isNaN(creditLine) && creditLine !== '' && creditLine >= 0);
@@ -128,9 +130,6 @@ function CreditModify({ onBack }) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker label="Fecha de Vencimiento" name="expireDate" value={formData.expireDate} views={['month', 'year']} onChange={(date) => handleDateChange("expireDate", date)} />
                     </LocalizationProvider>
-                    <TextField required label="Moneda" name="coin" value={formData.coin} onChange={handleChange}
-                        error={!isValidCoin(formData.coin)}
-                        helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''} />
                 </Stack>
                 <Stack {...rowStackProps}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

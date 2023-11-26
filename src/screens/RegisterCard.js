@@ -35,7 +35,6 @@ function RegisterCard({ onBack }) {
     cardNumber: '',
     accountNumber: userId,
     expireDate: null,
-    coin: '',
     cash: '',
     billingDate: null,
     interestRate: '',
@@ -43,6 +42,14 @@ function RegisterCard({ onBack }) {
     lastDayPayment: null,
     insurance: '',
   }); //Data de formulario, para Tarjeta Credito o Debito
+
+  const handleRequestError = (error) => {
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(error.response.data.error);
+    } else {
+      console.error("Error desconocido al actualizar la cuenta");
+    }
+  }; //Encargado de manejar los errores del servidor
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,7 +85,7 @@ function RegisterCard({ onBack }) {
       await axios.post(`http://localhost:3000/guardar-${tipoTarjeta}`, newCard);
       console.log('Datos enviados con éxito');
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
+      handleRequestError(error);
     }
     onBack();
   }; //Función para poder añadir Tarjeta Debito o Credito
@@ -87,9 +94,6 @@ function RegisterCard({ onBack }) {
   const isValidCardNumber = (cardNumber) => {
     const cardNumberRegex = /^\d{16}$/;
     return cardNumber === '' || cardNumberRegex.test(cardNumber);
-  };
-  const isValidCoin = (coin) => {
-    return coin === '' || coin.length <= 10;
   };
   const isValidCash = (cash) => {
     return cash === '' || (!isNaN(cash) && cash !== '' && cash >= 0);
@@ -110,10 +114,8 @@ function RegisterCard({ onBack }) {
     return (
       formData.cardNumber.trim() !== '' &&
       formData.expireDate !== null &&
-      formData.coin.trim() !== '' &&
       formData.cash.trim() !== '' &&
       isValidCardNumber(formData.cardNumber) &&
-      isValidCoin(formData.coin) &&
       isValidCash(formData.cash)
     );
   };
@@ -121,14 +123,12 @@ function RegisterCard({ onBack }) {
     return (
       formData.cardNumber.trim() !== '' &&
       formData.expireDate !== null &&
-      formData.coin.trim() !== '' &&
       formData.billingDate !== null &&
       formData.interestRate.trim() !== '' &&
       formData.creditLine.trim() !== '' &&
       formData.lastDayPayment !== null &&
       formData.insurance.trim() !== '' &&
       isValidCardNumber(formData.cardNumber) &&
-      isValidCoin(formData.coin) &&
       isValidCreditLine(formData.creditLine) &&
       isValidInsurance(formData.insurance)
     );
@@ -161,15 +161,13 @@ function RegisterCard({ onBack }) {
         <Stack {...rowStackProps}>
           <TextField required label="Numero de Tarjeta" name="cardNumber" value={formData.cardNumber} onChange={handleChange}
             error={!isValidCardNumber(formData.cardNumber)}
-            helperText={ !isValidCardNumber(formData.cardNumber) ? 'Número de tarjeta inválido' : '' } />
+            helperText={!isValidCardNumber(formData.cardNumber) ? 'Número de tarjeta inválido' : ''} />
         </Stack>
         <Stack {...rowStackProps}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker label="Fecha de Vencimiento" name="expireDate" value={formData.expireDate} views={['month', 'year']} onChange={(date) => handleDateChange("expireDate", date)} />
           </LocalizationProvider>
-          <TextField required label="Moneda" name="coin" value={formData.coin} onChange={handleChange}
-            error={!isValidCoin(formData.coin)}
-            helperText={!isValidCoin(formData.coin) ? 'Moneda inválida' : ''} />
+
         </Stack>
         <Tabs value={value} onChange={handleTab} centered>
           <Tab label="Debito" />
