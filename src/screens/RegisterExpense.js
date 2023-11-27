@@ -81,7 +81,8 @@ function RegisterExpense({ onBack }) {
 
     const handleSubmitExpense = async (e) => {
         e.preventDefault();
-        const newExpense = new Expense(formData.cardid, formData.userid, formData.mount, formData.category, formData.business, formData.date, formData.type, formData.installments);
+        const newExpense = new Expense(formData.cardid, formData.userid, formData.mount,
+             formData.category, formData.business, formData.date, formData.type, formData.installments);
         try {
             await axios.post('http://localhost:3000/guardar-gasto', newExpense);
             console.log('Datos enviados con éxito');

@@ -23,7 +23,7 @@ function ExpensesScreen({ onBack, onRegister }) {
   useEffect(() => {
     cargarGastos();
     // eslint-disable-next-line
-  }, []); //Se obtendra los gastos una vez se cargue la pagina
+  }); //Se obtendra los gastos una vez se cargue la pagina
 
   const cargarGastos = async () => {
     try {

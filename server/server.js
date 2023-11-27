@@ -79,22 +79,43 @@ app.post('/obtener-credito', async (req, res) => {
 app.post('/eliminar-debito', async (req, res) => {
   try {
     const { debitCardId } = req.body;
+    // Obtener información de gastos asociados al débito
+    const expenses = await db.manyOrNone('SELECT id FROM expenses WHERE cardid = $1 AND type = $2', [debitCardId.toString(), 'Debito']);
+    // Eliminar la tarjeta de débito
     await db.none('DELETE FROM debit WHERE id = $1', [debitCardId]);
-    res.status(200).json({ message: 'Tarjeta de débito eliminada con éxito' });
+    // Eliminar los gastos asociados
+    for (const expense of expenses) {
+      const { id: expenseId } = expense;
+      // Eliminar el gasto
+      await db.none('DELETE FROM expenses WHERE id = $1', [expenseId]);
+    }
+    res.status(200).json({ message: 'Tarjeta de débito y gastos asociados eliminados con éxito' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al eliminar la tarjeta de débito' });
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de débito y sus gastos asociados' });
   }
 });
 
 app.post('/eliminar-credito', async (req, res) => {
   try {
     const { creditCardId } = req.body;
+    // Obtener información de gastos asociados al crédito
+    const expenses = await db.manyOrNone('SELECT id FROM expenses WHERE cardid = $1 AND type = $2', [creditCardId.toString(), 'Credito']);
+    // Eliminar la tarjeta de crédito
     await db.none('DELETE FROM credit WHERE id = $1', [creditCardId]);
-    res.status(200).json({ message: 'Tarjeta de crédito eliminada con éxito' });
+    // Eliminar los gastos asociados
+    for (const expense of expenses) {
+      const { id: expenseId } = expense;
+      // Eliminar las cuotas asociadas al gasto
+      const installmentExpenseId = expenseId.toString();
+      await db.none('DELETE FROM expensesInstallments WHERE expenseid = $1', [installmentExpenseId]);
+      // Eliminar el gasto
+      await db.none('DELETE FROM expenses WHERE id = $1', [expenseId]);
+    }
+    res.status(200).json({ message: 'Tarjeta de crédito y gastos asociados eliminados con éxito' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito' });
+    res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito y sus gastos asociados' });
   }
 });
 
@@ -200,16 +221,58 @@ app.post('/actualizar-contrasena', async (req, res) => {
 app.post('/eliminar-cuenta', async (req, res) => {
   try {
     const { userId, password } = req.body;
+
+    // Verificar las credenciales antes de proceder con la eliminación
     const valid = await db.oneOrNone('SELECT * FROM users WHERE id = $1 AND password = $2', [userId, password]);
-    if (valid) {
-      await db.none('DELETE FROM users WHERE id = $1', [userId]);
-      res.status(200).json({ message: 'Tarjeta de crédito eliminada con éxito' });
-    } else {
-      res.status(401).json({ error: 'Contraseña incorrecta' });
+    if (!valid) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
+    // Obtener información de tarjetas de débito asociadas al usuario
+    const debitCards = await db.manyOrNone('SELECT id FROM debit WHERE accountNumber = $1', [userId]);
+    // Eliminar tarjetas de débito y sus gastos asociados
+    for (const debitCard of debitCards) {
+      const { id: debitCardId } = debitCard;
+      // Obtener información de gastos asociados al débito
+      const expenses = await db.manyOrNone('SELECT id FROM expenses WHERE cardid = $1 AND type = $2', [debitCardId.toString(), 'Debito']);
+      // Eliminar la tarjeta de débito
+      await db.none('DELETE FROM debit WHERE id = $1', [debitCardId]);
+      // Eliminar los gastos asociados
+      for (const expense of expenses) {
+        const { id: expenseId } = expense;
+        // Eliminar el gasto
+        await db.none('DELETE FROM expenses WHERE id = $1', [expenseId]);
+      }
+    }
+
+    // Obtener información de tarjetas de crédito asociadas al usuario
+    const creditCards = await db.manyOrNone('SELECT id FROM credit WHERE accountNumber = $1', [userId]);
+
+    // Eliminar tarjetas de crédito y sus gastos asociados
+    for (const creditCard of creditCards) {
+      const { id: creditCardId } = creditCard;
+      // Obtener información de gastos asociados al crédito
+      const expenses = await db.manyOrNone('SELECT id FROM expenses WHERE cardid = $1 AND type = $2', [creditCardId.toString(), 'Credito']);
+      // Eliminar la tarjeta de crédito
+      await db.none('DELETE FROM credit WHERE id = $1', [creditCardId]);
+      // Eliminar los gastos asociados
+      for (const expense of expenses) {
+        const { id: expenseId } = expense;
+        const installmentExpenseId = expenseId.toString();
+        // Eliminar las cuotas asociadas al gasto
+        await db.none('DELETE FROM expensesInstallments WHERE expenseid = $1', [installmentExpenseId]);
+
+        // Eliminar el gasto
+        await db.none('DELETE FROM expenses WHERE id = $1', [expenseId]);
+      }
+    }
+
+    // Eliminar la cuenta del usuario
+    await db.none('DELETE FROM users WHERE id = $1', [userId]);
+
+    res.status(200).json({ message: 'Cuenta y todos los datos asociados eliminados con éxito' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al eliminar la tarjeta de crédito' });
+    res.status(500).json({ error: 'Error al eliminar la cuenta y sus datos asociados' });
   }
 });
 app.post('/actualizar-cash', async (req, res) => {
@@ -229,19 +292,17 @@ app.post('/guardar-gasto', async (req, res) => {
   try {
     const { cardid, userid, mount, category, business, date, type, installments } = req.body;
     const expenseDate = new Date(date);
-    const result = await db.one('INSERT INTO expenses (cardid, userid, mount, category, business, date, type, installments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id', [cardid, userid, mount, category, business, expenseDate, type, installments]);
-    
+    const result = await db.one('INSERT INTO expenses (cardid, userid, mount, category, business, date, type, installments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+     [cardid, userid, mount, category, business, expenseDate, type, installments]);
     if (installments > 1) {
       const installment = mount / installments;
       const expenseid = result.id;
       for (let i = 0; i < installments; i++) {
-        
         const installmentDate = new Date(expenseDate);
         installmentDate.setMonth(expenseDate.getMonth() + i);
         await db.none('INSERT INTO expensesInstallments (expenseid, installment, date) VALUES ($1, $2, $3)', [expenseid, installment, installmentDate]);
       }
     }
-
     res.status(201).json({ message: 'Datos almacenados con éxito' });
   } catch (error) {
     console.error(error);
